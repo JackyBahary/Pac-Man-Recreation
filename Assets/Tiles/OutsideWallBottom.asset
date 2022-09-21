@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: OutsideCorner1
+  m_Name: OutsideWallBottom
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 21300000, guid: 025305a875b18244ca2075ddd2851ac4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5b15566124e401d44a6ee1ceec0eb2f5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
