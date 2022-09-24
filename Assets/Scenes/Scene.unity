@@ -5040,6 +5040,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1098697693}
   - component: {fileID: 1098697692}
+  - component: {fileID: 1098697694}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -5078,6 +5079,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1098697694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1098697691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c24f9d858a3e29b4d862bcb5cd558845, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tilemaps:
+  - {fileID: 1336370198}
+  - {fileID: 1702198552}
+  - {fileID: 331362275}
+  - {fileID: 11480264}
+  sprites:
+  - {fileID: 1059744699}
+  - {fileID: 902407518}
+  - {fileID: 540748094}
+  - {fileID: 1333839267}
+  - {fileID: 1145776323}
+  - {fileID: 1552874783}
+  - {fileID: 664812940}
 --- !u!1 &1145776323
 GameObject:
   m_ObjectHideFlags: 0
@@ -7420,7 +7446,7 @@ Tilemap:
       m_AnimatedSprites:
       - {fileID: -1327446991, guid: 418f79b7a89bd854989e17e2502b1499, type: 3}
       - {fileID: -335271998, guid: 418f79b7a89bd854989e17e2502b1499, type: 3}
-      m_AnimationSpeed: 3
+      m_AnimationSpeed: 3.0000002
       m_AnimationTimeOffset: 0
       m_IsLooping: 1
   m_TileAssetArray:
