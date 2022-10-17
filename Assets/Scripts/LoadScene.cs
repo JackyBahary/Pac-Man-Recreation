@@ -21,4 +21,9 @@ public class LoadScene:MonoBehaviour
     {
         SceneManager.LoadScene(1, LoadSceneMode.Single);
     }
+
+    public void ExitButtonClicked()
+    {
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
+    }
 }
