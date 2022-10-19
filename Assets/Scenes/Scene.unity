@@ -6154,7 +6154,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -35659946, guid: 60a2f8413b98cdc4784ca2abc502c5b9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -6323,6 +6323,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweener: {fileID: 1255826495}
   animator: {fileID: 1255826492}
+  movementClip: {fileID: 8300000, guid: 341d942d6cedbd041b8230f048e35413, type: 3}
+  pelletEatenClip: {fileID: 8300000, guid: 660ebb61845dd214d83d7a4876f4a319, type: 3}
 --- !u!1 &1294080159
 GameObject:
   m_ObjectHideFlags: 0
