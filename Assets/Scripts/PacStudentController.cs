@@ -70,6 +70,7 @@ public class PacStudentController : MonoBehaviour
             {
                 if (levelMap[gridRow - 1, gridColumn] == 5 || levelMap[gridRow - 1, gridColumn] == 6 || levelMap[gridRow - 1, gridColumn] == 0) //If the top of the pacStudent is a normal pellet, bonus pellet or empty space
                 {
+                    animator.speed = 1;
                     animator.SetBool("LeftReady", false);
                     animator.SetBool("RightReady", false);
                     animator.SetBool("UpReady", true);
@@ -93,6 +94,10 @@ public class PacStudentController : MonoBehaviour
                             gridRow -= 1;
                             tweener.AddTween(transform, transform.position, targetPos, 1);
                         }
+                        else //If the top is not walkable
+                        {
+                            animator.speed = 0;
+                        }
                     }
                     if (currentInput.Equals("a")) //If current input is "a"
                     {
@@ -103,6 +108,10 @@ public class PacStudentController : MonoBehaviour
                             pacX -= 1;
                             gridColumn -= 1;
                             tweener.AddTween(transform, transform.position, targetPos, 1);
+                        }
+                        else //If the left is not walkable
+                        {
+                            animator.speed = 0;
                         }
                     }
                     if (currentInput.Equals("s")) //If current input is "s"
@@ -115,6 +124,10 @@ public class PacStudentController : MonoBehaviour
                             gridRow += 1;
                             tweener.AddTween(transform, transform.position, targetPos, 1);
                         }
+                        else //If the bottom is not walkable
+                        {
+                            animator.speed = 0;
+                        }
                     }
                     if (currentInput.Equals("d")) //If current input is "d"
                     {
@@ -126,6 +139,10 @@ public class PacStudentController : MonoBehaviour
                             gridColumn += 1;
                             tweener.AddTween(transform, transform.position, targetPos, 1);
                         }
+                        else //If the right is not walkable
+                        {
+                            animator.speed = 0;
+                        }
                     }
                 }
             }
@@ -134,6 +151,7 @@ public class PacStudentController : MonoBehaviour
             {
                 if (levelMap[gridRow, gridColumn - 1] == 5 || levelMap[gridRow, gridColumn - 1] == 6 || levelMap[gridRow, gridColumn - 1] == 0) //If the left of pacStudent is a normal pellet, bonus pellet or empty space
                 {
+                    animator.speed = 1;
                     animator.SetBool("LeftReady", true);
                     animator.SetBool("RightReady", false);
                     animator.SetBool("UpReady", false);
@@ -157,6 +175,10 @@ public class PacStudentController : MonoBehaviour
                             gridRow -= 1;
                             tweener.AddTween(transform, transform.position, targetPos, 1);
                         }
+                        else //If the top is not walkable
+                        {
+                            animator.speed = 0;
+                        }
                     }
                     if (currentInput.Equals("a")) //If current input is "a"
                     {
@@ -167,6 +189,10 @@ public class PacStudentController : MonoBehaviour
                             pacX -= 1;
                             gridColumn -= 1;
                             tweener.AddTween(transform, transform.position, targetPos, 1);
+                        }
+                        else //If the left is not walkable
+                        {
+                            animator.speed = 0;
                         }
                     }
                     if (currentInput.Equals("s")) //If current input is "s"
@@ -179,6 +205,10 @@ public class PacStudentController : MonoBehaviour
                             gridRow += 1;
                             tweener.AddTween(transform, transform.position, targetPos, 1);
                         }
+                        else //If the bottom is not walkable
+                        {
+                            animator.speed = 0;
+                        }
                     }
                     if (currentInput.Equals("d")) //If current input is "d"
                     {
@@ -190,6 +220,10 @@ public class PacStudentController : MonoBehaviour
                             gridColumn += 1;
                             tweener.AddTween(transform, transform.position, targetPos, 1);
                         }
+                        else //If the right is not walkable
+                        {
+                            animator.speed = 0;
+                        }
                     }
                 }
             }
@@ -198,6 +232,7 @@ public class PacStudentController : MonoBehaviour
             {
                 if (levelMap[gridRow + 1, gridColumn] == 5 || levelMap[gridRow + 1, gridColumn] == 6 || levelMap[gridRow + 1, gridColumn] == 0) //If the bottom of pacStudent is a normal pellet, bonus pellet or empty space
                 {
+                    animator.speed = 1;
                     animator.SetBool("LeftReady", false);
                     animator.SetBool("RightReady", false);
                     animator.SetBool("UpReady", false);
@@ -221,6 +256,10 @@ public class PacStudentController : MonoBehaviour
                             gridRow -= 1;
                             tweener.AddTween(transform, transform.position, targetPos, 1);
                         }
+                        else //If the top is not walkable
+                        {
+                            animator.speed = 0;
+                        }
                     }
                     if (currentInput.Equals("a")) //If current input is "a"
                     {
@@ -231,6 +270,10 @@ public class PacStudentController : MonoBehaviour
                             pacX -= 1;
                             gridColumn -= 1;
                             tweener.AddTween(transform, transform.position, targetPos, 1);
+                        }
+                        else //If the left is not walkable
+                        {
+                            animator.speed = 0;
                         }
                     }
                     if (currentInput.Equals("s")) //If current input is "s"
@@ -243,6 +286,10 @@ public class PacStudentController : MonoBehaviour
                             gridRow += 1;
                             tweener.AddTween(transform, transform.position, targetPos, 1);
                         }
+                        else //If the bottom is not walkable
+                        {
+                            animator.speed = 0;
+                        }
                     }
                     if (currentInput.Equals("d")) //If current input is "d"
                     {
@@ -254,6 +301,10 @@ public class PacStudentController : MonoBehaviour
                             gridColumn += 1;
                             tweener.AddTween(transform, transform.position, targetPos, 1);
                         }
+                        else //If the right is not walkable
+                        {
+                            animator.speed = 0;
+                        }
                     }
                 }
             }
@@ -262,6 +313,7 @@ public class PacStudentController : MonoBehaviour
             {
                 if (levelMap[gridRow, gridColumn + 1] == 5 || levelMap[gridRow, gridColumn + 1] == 6 || levelMap[gridRow, gridColumn + 1] == 0) //If the right of the pacStudent is a normal pellet, bonus pellet or empty space
                 {
+                    animator.speed = 1;
                     animator.SetBool("LeftReady", false);
                     animator.SetBool("RightReady", true);
                     animator.SetBool("UpReady", false);
@@ -285,6 +337,10 @@ public class PacStudentController : MonoBehaviour
                             gridRow -= 1;
                             tweener.AddTween(transform, transform.position, targetPos, 1);
                         }
+                        else //If the top is not walkable
+                        {
+                            animator.speed = 0;
+                        }
                     }
                     if (currentInput.Equals("a")) //If current input is "a"
                     {
@@ -295,6 +351,10 @@ public class PacStudentController : MonoBehaviour
                             pacX -= 1;
                             gridColumn -= 1;
                             tweener.AddTween(transform, transform.position, targetPos, 1);
+                        }
+                        else //If the left is not walkable
+                        {
+                            animator.speed = 0;
                         }
                     }
                     if (currentInput.Equals("s")) //If current input is "s"
@@ -307,6 +367,10 @@ public class PacStudentController : MonoBehaviour
                             gridRow += 1;
                             tweener.AddTween(transform, transform.position, targetPos, 1);
                         }
+                        else //If the bottom is not walkable
+                        {
+                            animator.speed = 0;
+                        }
                     }
                     if (currentInput.Equals("d")) //If current input is "d"
                     {
@@ -317,6 +381,10 @@ public class PacStudentController : MonoBehaviour
                             pacX += 1;
                             gridColumn += 1;
                             tweener.AddTween(transform, transform.position, targetPos, 1);
+                        }
+                        else //If the right is not walkable
+                        {
+                            animator.speed = 0;
                         }
                     }
                 }
