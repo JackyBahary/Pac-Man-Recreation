@@ -6322,6 +6322,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tweener: {fileID: 1255826495}
+  animator: {fileID: 1255826492}
 --- !u!1 &1294080159
 GameObject:
   m_ObjectHideFlags: 0
