@@ -5,6 +5,7 @@ using UnityEngine;
 public class Tweener : MonoBehaviour {
     //private Tween activeTween;
     private List<Tween> activeTweens;
+    public bool tweenEnded = false;
 
     void Start() {
         activeTweens = new List<Tween>();
@@ -18,6 +19,7 @@ public class Tweener : MonoBehaviour {
             activeTween = activeTweens[i];
 
             if (Vector3.Distance(activeTween.Target.position, activeTween.EndPos) > 0.01f) {
+                tweenEnded = false;
                 float timeFraction = (Time.time - activeTween.StartTime) / activeTween.Duration;
                 //timeFraction = Mathf.Pow(timeFraction, 3);
                 activeTween.Target.position = Vector3.Lerp(activeTween.StartPos,
@@ -27,6 +29,7 @@ public class Tweener : MonoBehaviour {
                 activeTween.Target.position = activeTween.EndPos;
                 //activeTween = null;
                 activeTweens.RemoveAt(i);
+                tweenEnded = true;
             }
         }
     }

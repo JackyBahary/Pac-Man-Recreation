@@ -4799,6 +4799,8 @@ GameObject:
   - component: {fileID: 519420029}
   - component: {fileID: 519420033}
   - component: {fileID: 519420034}
+  - component: {fileID: 519420035}
+  - component: {fileID: 519420036}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -4982,6 +4984,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   introClip: {fileID: 8300000, guid: f6cdb019540c67549a4488a74f67ecd7, type: 3}
   normalClip: {fileID: 8300000, guid: e62bd916703822f4aa5dcecbbf372c76, type: 3}
+--- !u!114 &519420035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5ed3e6710e8fcf48a4f75351b35c745, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cherry: {fileID: 8133503881889497112, guid: 98bfa076a9a2e0442ba67daa73c4bf85, type: 3}
+  tweener: {fileID: 519420036}
+--- !u!114 &519420036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c8a7a9dcbceee543b4c23f0d6d51cfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tweenEnded: 0
 --- !u!1 &607959240
 GameObject:
   m_ObjectHideFlags: 0
@@ -11124,6 +11153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c8a7a9dcbceee543b4c23f0d6d51cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tweenEnded: 0
 --- !u!114 &1255826496
 MonoBehaviour:
   m_ObjectHideFlags: 0

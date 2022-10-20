@@ -96,11 +96,6 @@ public class PacStudentController : MonoBehaviour
         //Lerping Code
         if (!tweener.TweenExists(transform)) //If PacStudent is not moving
         {
-            //Vector3 targetPos = transform.position;
-            //targetPos.x = targetPos.x + 5;
-            //tweener.AddTween(transform, transform.position, targetPos, 10);
-            //Debug.Log("Going Again.");
-
             if (lastInput.Equals("w")) //If last input is "w"
             {
                 if (levelMap[gridRow - 1, gridColumn] == 5 || levelMap[gridRow - 1, gridColumn] == 6 || levelMap[gridRow - 1, gridColumn] == 0) //If the top of the pacStudent is a normal pellet, bonus pellet or empty space
@@ -120,7 +115,7 @@ public class PacStudentController : MonoBehaviour
                     targetPos.y = targetPos.y + 1;
                     pacY += 1;
                     gridRow -= 1;
-                    tweener.AddTween(transform, transform.position, targetPos, 1);
+                    tweener.AddTween(transform, transform.position, targetPos, 0.5f);
                 }
                 else //If the top of pacStudent is not walkable
                 {
@@ -137,7 +132,7 @@ public class PacStudentController : MonoBehaviour
                             targetPos.y = targetPos.y + 1;
                             pacY += 1;
                             gridRow -= 1;
-                            tweener.AddTween(transform, transform.position, targetPos, 1);
+                            tweener.AddTween(transform, transform.position, targetPos, 0.5f);
                         }
                         else //If the top is not walkable
                         {
@@ -157,7 +152,7 @@ public class PacStudentController : MonoBehaviour
                             targetPos.x = targetPos.x - 1;
                             pacX -= 1;
                             gridColumn -= 1;
-                            tweener.AddTween(transform, transform.position, targetPos, 1);
+                            tweener.AddTween(transform, transform.position, targetPos, 0.5f);
                         }
                         else //If the left is not walkable
                         {
@@ -177,7 +172,7 @@ public class PacStudentController : MonoBehaviour
                             targetPos.y = targetPos.y - 1;
                             pacY -= 1;
                             gridRow += 1;
-                            tweener.AddTween(transform, transform.position, targetPos, 1);
+                            tweener.AddTween(transform, transform.position, targetPos, 0.5f);
                         }
                         else //If the bottom is not walkable
                         {
@@ -197,7 +192,7 @@ public class PacStudentController : MonoBehaviour
                             targetPos.x = targetPos.x + 1;
                             pacX += 1;
                             gridColumn += 1;
-                            tweener.AddTween(transform, transform.position, targetPos, 1);
+                            tweener.AddTween(transform, transform.position, targetPos, 0.5f);
                         }
                         else //If the right is not walkable
                         {
@@ -228,7 +223,7 @@ public class PacStudentController : MonoBehaviour
                         targetPos.x = targetPos.x - 1;
                         pacX -= 1;
                         gridColumn -= 1;
-                        tweener.AddTween(transform, transform.position, targetPos, 1);
+                        tweener.AddTween(transform, transform.position, targetPos, 0.5f);
                     }
                     else //If the left of pacStudent is not walkable
                     {
@@ -245,7 +240,7 @@ public class PacStudentController : MonoBehaviour
                                 targetPos.y = targetPos.y + 1;
                                 pacY += 1;
                                 gridRow -= 1;
-                                tweener.AddTween(transform, transform.position, targetPos, 1);
+                                tweener.AddTween(transform, transform.position, targetPos, 0.5f);
                             }
                             else //If the top is not walkable
                             {
@@ -265,7 +260,7 @@ public class PacStudentController : MonoBehaviour
                                 targetPos.x = targetPos.x - 1;
                                 pacX -= 1;
                                 gridColumn -= 1;
-                                tweener.AddTween(transform, transform.position, targetPos, 1);
+                                tweener.AddTween(transform, transform.position, targetPos, 0.5f);
                             }
                             else //If the left is not walkable
                             {
@@ -285,7 +280,7 @@ public class PacStudentController : MonoBehaviour
                                 targetPos.y = targetPos.y - 1;
                                 pacY -= 1;
                                 gridRow += 1;
-                                tweener.AddTween(transform, transform.position, targetPos, 1);
+                                tweener.AddTween(transform, transform.position, targetPos, 0.5f);
                             }
                             else //If the bottom is not walkable
                             {
@@ -305,7 +300,7 @@ public class PacStudentController : MonoBehaviour
                                 targetPos.x = targetPos.x + 1;
                                 pacX += 1;
                                 gridColumn += 1;
-                                tweener.AddTween(transform, transform.position, targetPos, 1);
+                                tweener.AddTween(transform, transform.position, targetPos, 0.5f);
                             }
                             else //If the right is not walkable
                             {
@@ -339,7 +334,7 @@ public class PacStudentController : MonoBehaviour
                     targetPos.y = targetPos.y - 1;
                     pacY -= 1;
                     gridRow += 1;
-                    tweener.AddTween(transform, transform.position, targetPos, 1);
+                    tweener.AddTween(transform, transform.position, targetPos, 0.5f);
                 }
                 else //If the bottom of pacStudent is not walkable
                 {
@@ -356,7 +351,7 @@ public class PacStudentController : MonoBehaviour
                             targetPos.y = targetPos.y + 1;
                             pacY += 1;
                             gridRow -= 1;
-                            tweener.AddTween(transform, transform.position, targetPos, 1);
+                            tweener.AddTween(transform, transform.position, targetPos, 0.5f);
                         }
                         else //If the top is not walkable
                         {
@@ -376,7 +371,7 @@ public class PacStudentController : MonoBehaviour
                             targetPos.x = targetPos.x - 1;
                             pacX -= 1;
                             gridColumn -= 1;
-                            tweener.AddTween(transform, transform.position, targetPos, 1);
+                            tweener.AddTween(transform, transform.position, targetPos, 0.5f);
                         }
                         else //If the left is not walkable
                         {
@@ -396,7 +391,7 @@ public class PacStudentController : MonoBehaviour
                             targetPos.y = targetPos.y - 1;
                             pacY -= 1;
                             gridRow += 1;
-                            tweener.AddTween(transform, transform.position, targetPos, 1);
+                            tweener.AddTween(transform, transform.position, targetPos, 0.5f);
                         }
                         else //If the bottom is not walkable
                         {
@@ -416,7 +411,7 @@ public class PacStudentController : MonoBehaviour
                             targetPos.x = targetPos.x + 1;
                             pacX += 1;
                             gridColumn += 1;
-                            tweener.AddTween(transform, transform.position, targetPos, 1);
+                            tweener.AddTween(transform, transform.position, targetPos, 0.5f);
                         }
                         else //If the right is not walkable
                         {
@@ -447,7 +442,7 @@ public class PacStudentController : MonoBehaviour
                         targetPos.x = targetPos.x + 1;
                         pacX += 1;
                         gridColumn += 1;
-                        tweener.AddTween(transform, transform.position, targetPos, 1);
+                        tweener.AddTween(transform, transform.position, targetPos, 0.5f);
                     }
                     else //If the right of pacStudent is not walkable
                     {
@@ -464,7 +459,7 @@ public class PacStudentController : MonoBehaviour
                                 targetPos.y = targetPos.y + 1;
                                 pacY += 1;
                                 gridRow -= 1;
-                                tweener.AddTween(transform, transform.position, targetPos, 1);
+                                tweener.AddTween(transform, transform.position, targetPos, 0.5f);
                             }
                             else //If the top is not walkable
                             {
@@ -484,7 +479,7 @@ public class PacStudentController : MonoBehaviour
                                 targetPos.x = targetPos.x - 1;
                                 pacX -= 1;
                                 gridColumn -= 1;
-                                tweener.AddTween(transform, transform.position, targetPos, 1);
+                                tweener.AddTween(transform, transform.position, targetPos, 0.5f);
                             }
                             else //If the left is not walkable
                             {
@@ -504,7 +499,7 @@ public class PacStudentController : MonoBehaviour
                                 targetPos.y = targetPos.y - 1;
                                 pacY -= 1;
                                 gridRow += 1;
-                                tweener.AddTween(transform, transform.position, targetPos, 1);
+                                tweener.AddTween(transform, transform.position, targetPos, 0.5f);
                             }
                             else //If the bottom is not walkable
                             {
@@ -524,7 +519,7 @@ public class PacStudentController : MonoBehaviour
                                 targetPos.x = targetPos.x + 1;
                                 pacX += 1;
                                 gridColumn += 1;
-                                tweener.AddTween(transform, transform.position, targetPos, 1);
+                                tweener.AddTween(transform, transform.position, targetPos, 0.5f);
                             }
                             else //If the right is not walkable
                             {
