@@ -5,6 +5,8 @@ using UnityEngine;
 public class PacStudentController : MonoBehaviour
 {
     public Tweener tweener;
+    public new ParticleSystem particleSystem;
+    private ParticleSystem.EmissionModule em;
     private string lastInput = "";
     private string currentInput = "";
     int[,] levelMap =
@@ -52,11 +54,27 @@ public class PacStudentController : MonoBehaviour
     void Start()
     {
         source = GetComponent<AudioSource>();
+        em = particleSystem.emission;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Pausing of Particle Trail
+        if (lastInput.Equals(""))
+        {
+
+            em.enabled = false;
+        }
+        else if (animator.speed > 0)
+        {
+            em.enabled = true;
+        }
+        else
+        {
+            em.enabled = false;
+        }
+
         //Storing Inputs into "lastInput" variable
         if (Input.GetKeyDown(KeyCode.W))
         {
