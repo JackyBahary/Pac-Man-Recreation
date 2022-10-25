@@ -48,6 +48,7 @@ public class PacStudentController : MonoBehaviour
     public Animator animator;
     public AudioClip movementClip;
     public AudioClip pelletEatenClip;
+    public AudioClip wallBumpClip;
     private AudioSource source;
 
     // Start is called before the first frame update
@@ -534,5 +535,10 @@ public class PacStudentController : MonoBehaviour
                 animator.speed = 0;
             }
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        source.PlayOneShot(wallBumpClip, 3.0f);
     }
 }
