@@ -6,6 +6,7 @@ public class PacStudentController : MonoBehaviour
 {
     public Tweener tweener;
     public new ParticleSystem particleSystem;
+    public ParticleSystem wallCollidedParticles;
     private ParticleSystem.EmissionModule em;
     private string lastInput = "";
     private string currentInput = "";
@@ -64,7 +65,6 @@ public class PacStudentController : MonoBehaviour
         //Pausing of Particle Trail
         if (lastInput.Equals(""))
         {
-
             em.enabled = false;
         }
         else if (animator.speed > 0)
@@ -539,6 +539,10 @@ public class PacStudentController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        source.PlayOneShot(wallBumpClip, 3.0f);
+        if (lastInput == currentInput)
+        {
+            source.PlayOneShot(wallBumpClip, 3.0f);
+            wallCollidedParticles.Play();
+        }
     }
 }
