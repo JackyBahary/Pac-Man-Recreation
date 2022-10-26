@@ -117,6 +117,10 @@ public class PacStudentController : MonoBehaviour
                     pacY += 1;
                     gridRow -= 1;
                     tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                    Debug.Log("Grid Row: " + gridRow);
+                    Debug.Log("Grid Column: " + gridColumn);
+                    Debug.Log("pacX: " + pacX);
+                    Debug.Log("pacY: " + pacY);
                 }
                 else //If the top of pacStudent is not walkable
                 {
@@ -134,10 +138,18 @@ public class PacStudentController : MonoBehaviour
                             pacY += 1;
                             gridRow -= 1;
                             tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                            Debug.Log("Grid Row: " + gridRow);
+                            Debug.Log("Grid Column: " + gridColumn);
+                            Debug.Log("pacX: " + pacX);
+                            Debug.Log("pacY: " + pacY);
                         }
                         else //If the top is not walkable
                         {
                             animator.speed = 0;
+                            Debug.Log("Grid Row: " + gridRow);
+                            Debug.Log("Grid Column: " + gridColumn);
+                            Debug.Log("pacX: " + pacX);
+                            Debug.Log("pacY: " + pacY);
                         }
                     }
                     if (currentInput.Equals("a")) //If current input is "a"
@@ -154,10 +166,18 @@ public class PacStudentController : MonoBehaviour
                             pacX -= 1;
                             gridColumn -= 1;
                             tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                            Debug.Log("Grid Row: " + gridRow);
+                            Debug.Log("Grid Column: " + gridColumn);
+                            Debug.Log("pacX: " + pacX);
+                            Debug.Log("pacY: " + pacY);
                         }
                         else //If the left is not walkable
                         {
                             animator.speed = 0;
+                            Debug.Log("Grid Row: " + gridRow);
+                            Debug.Log("Grid Column: " + gridColumn);
+                            Debug.Log("pacX: " + pacX);
+                            Debug.Log("pacY: " + pacY);
                         }
                     }
                     if (currentInput.Equals("s")) //If current input is "s"
@@ -174,10 +194,18 @@ public class PacStudentController : MonoBehaviour
                             pacY -= 1;
                             gridRow += 1;
                             tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                            Debug.Log("Grid Row: " + gridRow);
+                            Debug.Log("Grid Column: " + gridColumn);
+                            Debug.Log("pacX: " + pacX);
+                            Debug.Log("pacY: " + pacY);
                         }
                         else //If the bottom is not walkable
                         {
                             animator.speed = 0;
+                            Debug.Log("Grid Row: " + gridRow);
+                            Debug.Log("Grid Column: " + gridColumn);
+                            Debug.Log("pacX: " + pacX);
+                            Debug.Log("pacY: " + pacY);
                         }
                     }
                     if (currentInput.Equals("d")) //If current input is "d"
@@ -194,18 +222,26 @@ public class PacStudentController : MonoBehaviour
                             pacX += 1;
                             gridColumn += 1;
                             tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                            Debug.Log("Grid Row: " + gridRow);
+                            Debug.Log("Grid Column: " + gridColumn);
+                            Debug.Log("pacX: " + pacX);
+                            Debug.Log("pacY: " + pacY);
                         }
                         else //If the right is not walkable
                         {
                             animator.speed = 0;
+                            Debug.Log("Grid Row: " + gridRow);
+                            Debug.Log("Grid Column: " + gridColumn);
+                            Debug.Log("pacX: " + pacX);
+                            Debug.Log("pacY: " + pacY);
                         }
                     }
                 }
             }
 
-            if (gridColumn - 1 >= 0) //If left is not out of bounds
+            if (lastInput.Equals("a")) //If last input is "a"
             {
-                if (lastInput.Equals("a")) //If last input is "a"
+                if (gridColumn - 1 >= 0) //If left is not out of bounds
                 {
                     if (levelMap[gridRow, gridColumn - 1] == 5 || levelMap[gridRow, gridColumn - 1] == 6 || levelMap[gridRow, gridColumn - 1] == 0) //If the left of pacStudent is a normal pellet, bonus pellet or empty space
                     {
@@ -225,6 +261,10 @@ public class PacStudentController : MonoBehaviour
                         pacX -= 1;
                         gridColumn -= 1;
                         tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                        Debug.Log("Grid Row: " + gridRow);
+                        Debug.Log("Grid Column: " + gridColumn);
+                        Debug.Log("pacX: " + pacX);
+                        Debug.Log("pacY: " + pacY);
                     }
                     else //If the left of pacStudent is not walkable
                     {
@@ -242,10 +282,18 @@ public class PacStudentController : MonoBehaviour
                                 pacY += 1;
                                 gridRow -= 1;
                                 tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
                             }
                             else //If the top is not walkable
                             {
                                 animator.speed = 0;
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
                             }
                         }
                         if (currentInput.Equals("a")) //If current input is "a"
@@ -262,10 +310,18 @@ public class PacStudentController : MonoBehaviour
                                 pacX -= 1;
                                 gridColumn -= 1;
                                 tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
                             }
                             else //If the left is not walkable
                             {
                                 animator.speed = 0;
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
                             }
                         }
                         if (currentInput.Equals("s")) //If current input is "s"
@@ -282,10 +338,18 @@ public class PacStudentController : MonoBehaviour
                                 pacY -= 1;
                                 gridRow += 1;
                                 tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
                             }
                             else //If the bottom is not walkable
                             {
                                 animator.speed = 0;
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
                             }
                         }
                         if (currentInput.Equals("d")) //If current input is "d"
@@ -302,18 +366,37 @@ public class PacStudentController : MonoBehaviour
                                 pacX += 1;
                                 gridColumn += 1;
                                 tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
                             }
                             else //If the right is not walkable
                             {
                                 animator.speed = 0;
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
                             }
                         }
                     }
                 }
-            }
-            else //If left is out of bounds
-            {
-                animator.speed = 0;
+                else //If left is out of bounds
+                {
+                    animator.speed = 0;
+                    source.PlayOneShot(movementClip);
+                    Vector3 newPos = new Vector3(-transform.position.x, transform.position.y, transform.position.z);
+                    Vector3 targetPos = newPos;
+                    targetPos.x = targetPos.x - 1;
+                    pacX = 12.5f;
+                    gridColumn = 26;
+                    tweener.AddTween(transform, newPos, targetPos, 0.5f);
+                    Debug.Log("Grid Row: " + gridRow);
+                    Debug.Log("Grid Column: " + gridColumn);
+                    Debug.Log("pacX: " + pacX);
+                    Debug.Log("pacY: " + pacY);
+                }
             }
 
             if (lastInput.Equals("s")) //If last input is "s"
@@ -336,6 +419,10 @@ public class PacStudentController : MonoBehaviour
                     pacY -= 1;
                     gridRow += 1;
                     tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                    Debug.Log("Grid Row: " + gridRow);
+                    Debug.Log("Grid Column: " + gridColumn);
+                    Debug.Log("pacX: " + pacX);
+                    Debug.Log("pacY: " + pacY);
                 }
                 else //If the bottom of pacStudent is not walkable
                 {
@@ -353,10 +440,18 @@ public class PacStudentController : MonoBehaviour
                             pacY += 1;
                             gridRow -= 1;
                             tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                            Debug.Log("Grid Row: " + gridRow);
+                            Debug.Log("Grid Column: " + gridColumn);
+                            Debug.Log("pacX: " + pacX);
+                            Debug.Log("pacY: " + pacY);
                         }
                         else //If the top is not walkable
                         {
                             animator.speed = 0;
+                            Debug.Log("Grid Row: " + gridRow);
+                            Debug.Log("Grid Column: " + gridColumn);
+                            Debug.Log("pacX: " + pacX);
+                            Debug.Log("pacY: " + pacY);
                         }
                     }
                     if (currentInput.Equals("a")) //If current input is "a"
@@ -373,10 +468,18 @@ public class PacStudentController : MonoBehaviour
                             pacX -= 1;
                             gridColumn -= 1;
                             tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                            Debug.Log("Grid Row: " + gridRow);
+                            Debug.Log("Grid Column: " + gridColumn);
+                            Debug.Log("pacX: " + pacX);
+                            Debug.Log("pacY: " + pacY);
                         }
                         else //If the left is not walkable
                         {
                             animator.speed = 0;
+                            Debug.Log("Grid Row: " + gridRow);
+                            Debug.Log("Grid Column: " + gridColumn);
+                            Debug.Log("pacX: " + pacX);
+                            Debug.Log("pacY: " + pacY);
                         }
                     }
                     if (currentInput.Equals("s")) //If current input is "s"
@@ -393,10 +496,18 @@ public class PacStudentController : MonoBehaviour
                             pacY -= 1;
                             gridRow += 1;
                             tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                            Debug.Log("Grid Row: " + gridRow);
+                            Debug.Log("Grid Column: " + gridColumn);
+                            Debug.Log("pacX: " + pacX);
+                            Debug.Log("pacY: " + pacY);
                         }
                         else //If the bottom is not walkable
                         {
                             animator.speed = 0;
+                            Debug.Log("Grid Row: " + gridRow);
+                            Debug.Log("Grid Column: " + gridColumn);
+                            Debug.Log("pacX: " + pacX);
+                            Debug.Log("pacY: " + pacY);
                         }
                     }
                     if (currentInput.Equals("d")) //If current input is "d"
@@ -413,18 +524,26 @@ public class PacStudentController : MonoBehaviour
                             pacX += 1;
                             gridColumn += 1;
                             tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                            Debug.Log("Grid Row: " + gridRow);
+                            Debug.Log("Grid Column: " + gridColumn);
+                            Debug.Log("pacX: " + pacX);
+                            Debug.Log("pacY: " + pacY);
                         }
                         else //If the right is not walkable
                         {
                             animator.speed = 0;
+                            Debug.Log("Grid Row: " + gridRow);
+                            Debug.Log("Grid Column: " + gridColumn);
+                            Debug.Log("pacX: " + pacX);
+                            Debug.Log("pacY: " + pacY);
                         }
                     }
                 }
             }
 
-            if (gridColumn + 1 <= (levelMap.GetLength(1) - 1)) //If the right is not out of bounds
+            if (lastInput.Equals("d")) //If last input is "d"
             {
-                if (lastInput.Equals("d")) //If last input is "d"
+                if (gridColumn + 1 <= (levelMap.GetLength(1) - 1)) //If the right is not out of bounds
                 {
                     if (levelMap[gridRow, gridColumn + 1] == 5 || levelMap[gridRow, gridColumn + 1] == 6 || levelMap[gridRow, gridColumn + 1] == 0) //If the right of the pacStudent is a normal pellet, bonus pellet or empty space
                     {
@@ -444,6 +563,10 @@ public class PacStudentController : MonoBehaviour
                         pacX += 1;
                         gridColumn += 1;
                         tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                        Debug.Log("Grid Row: " + gridRow);
+                        Debug.Log("Grid Column: " + gridColumn);
+                        Debug.Log("pacX: " + pacX);
+                        Debug.Log("pacY: " + pacY);
                     }
                     else //If the right of pacStudent is not walkable
                     {
@@ -461,10 +584,18 @@ public class PacStudentController : MonoBehaviour
                                 pacY += 1;
                                 gridRow -= 1;
                                 tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
                             }
                             else //If the top is not walkable
                             {
                                 animator.speed = 0;
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
                             }
                         }
                         if (currentInput.Equals("a")) //If current input is "a"
@@ -481,10 +612,18 @@ public class PacStudentController : MonoBehaviour
                                 pacX -= 1;
                                 gridColumn -= 1;
                                 tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
                             }
                             else //If the left is not walkable
                             {
                                 animator.speed = 0;
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
                             }
                         }
                         if (currentInput.Equals("s")) //If current input is "s"
@@ -501,10 +640,18 @@ public class PacStudentController : MonoBehaviour
                                 pacY -= 1;
                                 gridRow += 1;
                                 tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
                             }
                             else //If the bottom is not walkable
                             {
                                 animator.speed = 0;
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
                             }
                         }
                         if (currentInput.Equals("d")) //If current input is "d"
@@ -521,18 +668,37 @@ public class PacStudentController : MonoBehaviour
                                 pacX += 1;
                                 gridColumn += 1;
                                 tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
                             }
                             else //If the right is not walkable
                             {
                                 animator.speed = 0;
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
                             }
                         }
                     }
                 }
-            }
-            else //If right is out of bounds
-            {
-                animator.speed = 0;
+                else //If right is out of bounds
+                {
+                    animator.speed = 0;
+                    source.PlayOneShot(movementClip);
+                    Vector3 newPos = new Vector3(-transform.position.x, transform.position.y, transform.position.z);
+                    Vector3 targetPos = newPos;
+                    targetPos.x = targetPos.x + 1;
+                    pacX = -12.5f;
+                    gridColumn = 1;
+                    tweener.AddTween(transform, newPos, targetPos, 0.5f);
+                    Debug.Log("Grid Row: " + gridRow);
+                    Debug.Log("Grid Column: " + gridColumn);
+                    Debug.Log("pacX: " + pacX);
+                    Debug.Log("pacY: " + pacY);
+                }
             }
         }
     }
