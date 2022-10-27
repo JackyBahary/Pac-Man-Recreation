@@ -17,17 +17,28 @@ public class Tweener : MonoBehaviour {
         tweenEnded = false;
         for (int i = activeTweens.Count-1; i >=0; i--) //Tween activeTween in activeTweens.Reverse<Tween>())
         {
-            activeTween = activeTweens[i];
+            if (activeTweens[i].Target != null)
+            {
+                activeTween = activeTweens[i];
 
-            if (Vector3.Distance(activeTween.Target.position, activeTween.EndPos) > 0.01f) {
-                float timeFraction = (Time.time - activeTween.StartTime) / activeTween.Duration;
-                //timeFraction = Mathf.Pow(timeFraction, 3);
-                activeTween.Target.position = Vector3.Lerp(activeTween.StartPos,
-                                                          activeTween.EndPos,
-                                                           timeFraction);                
-            } else {
-                activeTween.Target.position = activeTween.EndPos;
-                //activeTween = null;
+                if (Vector3.Distance(activeTween.Target.position, activeTween.EndPos) > 0.01f)
+                {
+                    float timeFraction = (Time.time - activeTween.StartTime) / activeTween.Duration;
+                    //timeFraction = Mathf.Pow(timeFraction, 3);
+                    activeTween.Target.position = Vector3.Lerp(activeTween.StartPos,
+                                                              activeTween.EndPos,
+                                                               timeFraction);
+                }
+                else
+                {
+                    activeTween.Target.position = activeTween.EndPos;
+                    //activeTween = null;
+                    activeTweens.RemoveAt(i);
+                    tweenEnded = true;
+                }
+            }
+            else
+            {
                 activeTweens.RemoveAt(i);
                 tweenEnded = true;
             }

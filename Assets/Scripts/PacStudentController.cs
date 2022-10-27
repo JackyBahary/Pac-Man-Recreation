@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PacStudentController : MonoBehaviour
 {
     public Tweener tweener;
+    public GameObject cherryReference;
+    public TextMeshProUGUI score;
     public new ParticleSystem particleSystem;
     public ParticleSystem wallCollidedParticles;
     private ParticleSystem.EmissionModule em;
@@ -705,10 +708,27 @@ public class PacStudentController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (lastInput == currentInput)
-        {
-            source.PlayOneShot(wallBumpClip, 3.0f);
-            wallCollidedParticles.Play();
-        }
+            if (other.gameObject.name.Contains("OutsideWall") || other.gameObject.name.Contains("InnerWall"))
+            {
+                if (lastInput == currentInput)
+                {
+                    source.PlayOneShot(wallBumpClip, 3.0f);
+                    wallCollidedParticles.Play();
+                }
+            }
+            else if (other.gameObject.name.Contains("NormalPellet"))
+            {
+                Destroy(other.gameObject);
+                string[] scoreTexts = score.text.Split(':');
+                int scorePoint = int.Parse(scoreTexts[1]) + 10;
+                score.text = "Score: " + scorePoint.ToString();
+            }
+            else if (other.gameObject.name.Contains("Cherry"))
+            {
+                Destroy(other.gameObject);
+                string[] scoreTexts = score.text.Split(':');
+                int scorePoint = int.Parse(scoreTexts[1]) + 100;
+                score.text = "Score: " + scorePoint.ToString();
+            }
     }
 }
