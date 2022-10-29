@@ -61,8 +61,12 @@ public class PacStudentController : MonoBehaviour
     public Animator ghost_animator2;
     public Animator ghost_animator3;
     public Animator ghost_animator4;
-    private float scaredTimer = 10;
-    private float deadTimer = 1;
+    private float scaredTimer = 11;
+    private float deadPacTimer = 1;
+    private float deadGhostTimer1 = 5;
+    private float deadGhostTimer2 = 5;
+    private float deadGhostTimer3 = 5;
+    private float deadGhostTimer4 = 5;
     public Image[] lives = new Image[3];
 
     // Start is called before the first frame update
@@ -112,6 +116,8 @@ public class PacStudentController : MonoBehaviour
                 ghost_animator4.SetBool("walkingReady", true);
                 ghostTimer.enabled = false;
                 scaredTimer = 10;
+                AudioController.scaredReady = false;
+                AudioController.deadReady = false;
                 AudioController.walkReady = true;
             }
         }
@@ -119,8 +125,8 @@ public class PacStudentController : MonoBehaviour
         //Animation for Dead PacStudent
         if (animator.GetBool("LeftDead") == true || animator.GetBool("RightDead") == true || animator.GetBool("DownDead") == true || animator.GetBool("UpDead") == true)
         {
-            deadTimer -= Time.deltaTime;
-            if (deadTimer < 0)
+            deadPacTimer -= Time.deltaTime;
+            if (deadPacTimer < 0)
             {
                 this.GetComponent<BoxCollider>().enabled = true;
                 animator.SetBool("LeftDead", false);
@@ -137,7 +143,63 @@ public class PacStudentController : MonoBehaviour
                 gridRow = 1;
                 gridColumn = 1;
                 tweener.AddTween(transform, newPos, newPos, 0f);
-                deadTimer = 1;
+                deadPacTimer = 1;
+            }
+        }
+
+        //Animation for Dead Ghost 1
+        if (ghost_animator1.GetBool("deadReady") == true)
+        {
+            deadGhostTimer1 -= Time.deltaTime;
+            if (deadGhostTimer1 < 0)
+            {
+                ghost_animator1.SetBool("deadReady", false);
+                ghost_animator1.SetBool("scaredReady", false);
+                ghost_animator1.SetBool("recoveringReady", false);
+                ghost_animator1.SetBool("walkingReady", true);
+                deadGhostTimer1 = 5;
+            }
+        }
+
+        //Animation for Dead Ghost 2
+        if (ghost_animator2.GetBool("deadReady") == true)
+        {
+            deadGhostTimer2 -= Time.deltaTime;
+            if (deadGhostTimer2 < 0)
+            {
+                ghost_animator2.SetBool("deadReady", false);
+                ghost_animator2.SetBool("scaredReady", false);
+                ghost_animator2.SetBool("recoveringReady", false);
+                ghost_animator2.SetBool("walkingReady", true);
+                deadGhostTimer2 = 5;
+            }
+        }
+
+        //Animation for Dead Ghost 3
+        if (ghost_animator3.GetBool("deadReady") == true)
+        {
+            deadGhostTimer3 -= Time.deltaTime;
+            if (deadGhostTimer3 < 0)
+            {
+                ghost_animator3.SetBool("deadReady", false);
+                ghost_animator3.SetBool("scaredReady", false);
+                ghost_animator3.SetBool("recoveringReady", false);
+                ghost_animator3.SetBool("walkingReady", true);
+                deadGhostTimer3 = 5;
+            }
+        }
+
+        //Animation for Dead Ghost 4
+        if (ghost_animator4.GetBool("deadReady") == true)
+        {
+            deadGhostTimer4 -= Time.deltaTime;
+            if (deadGhostTimer4 < 0)
+            {
+                ghost_animator4.SetBool("deadReady", false);
+                ghost_animator4.SetBool("scaredReady", false);
+                ghost_animator4.SetBool("recoveringReady", false);
+                ghost_animator4.SetBool("walkingReady", true);
+                deadGhostTimer4 = 5;
             }
         }
 
@@ -919,6 +981,38 @@ public class PacStudentController : MonoBehaviour
                         lost = false;
                     }
                 }
+            }
+            else if (other.gameObject.name.Contains("GhostNormal1") && ((ghost_animator1.GetBool("scaredReady") == true) || (ghost_animator1.GetBool("recoveringReady") == true)))
+            {
+                AudioController.deadReady = true;
+                ghost_animator1.SetBool("deadReady", true);
+                string[] scoreTexts = score.text.Split(':');
+                int scorePoint = int.Parse(scoreTexts[1]) + 300;
+                score.text = "Score: " + scorePoint.ToString();
+            }
+            else if (other.gameObject.name.Contains("GhostNormal2") && ((ghost_animator2.GetBool("scaredReady") == true) || (ghost_animator2.GetBool("recoveringReady") == true)))
+            {
+                AudioController.deadReady = true;
+                ghost_animator2.SetBool("deadReady", true);
+                string[] scoreTexts = score.text.Split(':');
+                int scorePoint = int.Parse(scoreTexts[1]) + 300;
+                score.text = "Score: " + scorePoint.ToString();
+            }
+            else if (other.gameObject.name.Contains("GhostNormal3") && ((ghost_animator3.GetBool("scaredReady") == true) || (ghost_animator3.GetBool("recoveringReady") == true)))
+            {
+                AudioController.deadReady = true;
+                ghost_animator3.SetBool("deadReady", true);
+                string[] scoreTexts = score.text.Split(':');
+                int scorePoint = int.Parse(scoreTexts[1]) + 300;
+                score.text = "Score: " + scorePoint.ToString();
+            }
+            else if (other.gameObject.name.Contains("GhostNormal4") && ((ghost_animator4.GetBool("scaredReady") == true) || (ghost_animator4.GetBool("recoveringReady") == true)))
+            {
+                AudioController.deadReady = true;
+                ghost_animator4.SetBool("deadReady", true);
+                string[] scoreTexts = score.text.Split(':');
+                int scorePoint = int.Parse(scoreTexts[1]) + 300;
+                score.text = "Score: " + scorePoint.ToString();
             }
         }
     }

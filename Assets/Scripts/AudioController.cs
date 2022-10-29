@@ -7,9 +7,11 @@ public class AudioController : MonoBehaviour
     public AudioClip introClip;
     public AudioClip normalClip;
     public AudioClip scaredClip;
+    public AudioClip deadClip;
     private AudioSource source;
     public static bool scaredReady = false;
     public static bool walkReady = false;
+    public static bool deadReady = false;
 
     // Start is called before the first frame update
     void Start()
@@ -30,8 +32,15 @@ public class AudioController : MonoBehaviour
         if (walkReady)
         {
             StopCoroutine(playScaredClip());
+            StopCoroutine(playDeadClip());
             StartCoroutine(playNormalClip());
             walkReady = false;
+        }
+        if (deadReady && source.clip != deadClip)
+        {
+            StopCoroutine(playScaredClip());
+            StartCoroutine(playDeadClip());
+            deadReady = false;
         }
     }
 
@@ -54,6 +63,14 @@ public class AudioController : MonoBehaviour
     IEnumerator playScaredClip()
     {
         source.clip = scaredClip;
+        source.Play();
+        source.loop = true;
+        yield return null;
+    }
+
+    IEnumerator playDeadClip()
+    {
+        source.clip = deadClip;
         source.Play();
         source.loop = true;
         yield return null;
