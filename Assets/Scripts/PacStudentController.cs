@@ -6,7 +6,6 @@ using TMPro;
 public class PacStudentController : MonoBehaviour
 {
     public Tweener tweener;
-    public GameObject cherryReference;
     public TextMeshProUGUI score;
     public new ParticleSystem particleSystem;
     public ParticleSystem wallCollidedParticles;
