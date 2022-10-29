@@ -4984,6 +4984,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   introClip: {fileID: 8300000, guid: f6cdb019540c67549a4488a74f67ecd7, type: 3}
   normalClip: {fileID: 8300000, guid: e62bd916703822f4aa5dcecbbf372c76, type: 3}
+  scaredClip: {fileID: 8300000, guid: f6ebbd3de7638fd41b399d2832011547, type: 3}
 --- !u!114 &519420035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11066,12 +11067,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tweener: {fileID: 1255826495}
   score: {fileID: 1424925153}
+  ghostTimer: {fileID: 84129005}
   particleSystem: {fileID: 1160525615}
   wallCollidedParticles: {fileID: 1313011751}
   animator: {fileID: 1255826492}
   movementClip: {fileID: 8300000, guid: 341d942d6cedbd041b8230f048e35413, type: 3}
   pelletEatenClip: {fileID: 8300000, guid: 660ebb61845dd214d83d7a4876f4a319, type: 3}
   wallBumpClip: {fileID: 8300000, guid: c072cd896b70b9b44a9a6f3284e4fe7b, type: 3}
+  ghost_animator1: {fileID: 913095568}
+  ghost_animator2: {fileID: 2071941906}
+  ghost_animator3: {fileID: 1726964260}
+  ghost_animator4: {fileID: 1294080162}
 --- !u!54 &1255826498
 Rigidbody:
   m_ObjectHideFlags: 0

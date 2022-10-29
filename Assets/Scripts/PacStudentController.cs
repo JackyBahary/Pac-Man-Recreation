@@ -7,6 +7,7 @@ public class PacStudentController : MonoBehaviour
 {
     public Tweener tweener;
     public TextMeshProUGUI score;
+    public TextMeshProUGUI ghostTimer;
     public new ParticleSystem particleSystem;
     public ParticleSystem wallCollidedParticles;
     private ParticleSystem.EmissionModule em;
@@ -53,17 +54,63 @@ public class PacStudentController : MonoBehaviour
     public AudioClip pelletEatenClip;
     public AudioClip wallBumpClip;
     private AudioSource source;
+    public Animator ghost_animator1;
+    public Animator ghost_animator2;
+    public Animator ghost_animator3;
+    public Animator ghost_animator4;
+    private float scaredTimer = 10;
 
     // Start is called before the first frame update
     void Start()
     {
         source = GetComponent<AudioSource>();
         em = particleSystem.emission;
+
     }
 
     // Update is called once per frame
     void Update()
-    {
+    {                
+        //Ghost Scared Timer
+        if (ghostTimer.isActiveAndEnabled)
+        {
+            ghostTimer.text = "Scared Timer: " + (int)scaredTimer;
+            scaredTimer -= Time.deltaTime;
+            if (scaredTimer < 4)
+            {
+                ghost_animator1.SetBool("scaredReady", false);
+                ghost_animator1.SetBool("recoveringReady", true);
+                ghost_animator1.SetBool("walkingReady", false);
+                ghost_animator2.SetBool("scaredReady", false);
+                ghost_animator2.SetBool("recoveringReady", true);
+                ghost_animator2.SetBool("walkingReady", false);
+                ghost_animator3.SetBool("scaredReady", false);
+                ghost_animator3.SetBool("recoveringReady", true);
+                ghost_animator3.SetBool("walkingReady", false);
+                ghost_animator4.SetBool("scaredReady", false);
+                ghost_animator4.SetBool("recoveringReady", true);
+                ghost_animator4.SetBool("walkingReady", false);
+            }
+            if (scaredTimer < 1)
+            {
+                ghost_animator1.SetBool("scaredReady", false);
+                ghost_animator1.SetBool("recoveringReady", false);
+                ghost_animator1.SetBool("walkingReady", true);
+                ghost_animator2.SetBool("scaredReady", false);
+                ghost_animator2.SetBool("recoveringReady", false);
+                ghost_animator2.SetBool("walkingReady", true);
+                ghost_animator3.SetBool("scaredReady", false);
+                ghost_animator3.SetBool("recoveringReady", false);
+                ghost_animator3.SetBool("walkingReady", true);
+                ghost_animator4.SetBool("scaredReady", false);
+                ghost_animator4.SetBool("recoveringReady", false);
+                ghost_animator4.SetBool("walkingReady", true);
+                ghostTimer.enabled = false;
+                scaredTimer = 10;
+                AudioController.walkReady = true;
+            }
+        }
+
         //Pausing of Particle Trail
         if (lastInput.Equals(""))
         {
@@ -707,27 +754,45 @@ public class PacStudentController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-            if (other.gameObject.name.Contains("OutsideWall") || other.gameObject.name.Contains("InnerWall"))
+        if (other.gameObject.name.Contains("OutsideWall") || other.gameObject.name.Contains("InnerWall"))
+        {
+            if (lastInput == currentInput)
             {
-                if (lastInput == currentInput)
-                {
-                    source.PlayOneShot(wallBumpClip, 3.0f);
-                    wallCollidedParticles.Play();
-                }
+                source.PlayOneShot(wallBumpClip, 3.0f);
+                wallCollidedParticles.Play();
             }
-            else if (other.gameObject.name.Contains("NormalPellet"))
-            {
-                Destroy(other.gameObject);
-                string[] scoreTexts = score.text.Split(':');
-                int scorePoint = int.Parse(scoreTexts[1]) + 10;
-                score.text = "Score: " + scorePoint.ToString();
-            }
-            else if (other.gameObject.name.Contains("Cherry"))
-            {
-                Destroy(other.gameObject);
-                string[] scoreTexts = score.text.Split(':');
-                int scorePoint = int.Parse(scoreTexts[1]) + 100;
-                score.text = "Score: " + scorePoint.ToString();
-            }
+        }
+        else if (other.gameObject.name.Contains("NormalPellet"))
+        {
+            Destroy(other.gameObject);
+            string[] scoreTexts = score.text.Split(':');
+            int scorePoint = int.Parse(scoreTexts[1]) + 10;
+            score.text = "Score: " + scorePoint.ToString();
+        }
+        else if (other.gameObject.name.Contains("Cherry"))
+        {
+            Destroy(other.gameObject);
+            string[] scoreTexts = score.text.Split(':');
+            int scorePoint = int.Parse(scoreTexts[1]) + 100;
+            score.text = "Score: " + scorePoint.ToString();
+        }
+        else if (other.gameObject.name.Contains("PowerPellet"))
+        {
+            Destroy(other.gameObject);
+            ghost_animator1.SetBool("scaredReady", true);
+            ghost_animator1.SetBool("recoveringReady", false);
+            ghost_animator1.SetBool("walkingReady", false);
+            ghost_animator2.SetBool("scaredReady", true);
+            ghost_animator2.SetBool("recoveringReady", false);
+            ghost_animator2.SetBool("walkingReady", false);
+            ghost_animator3.SetBool("scaredReady", true);
+            ghost_animator3.SetBool("recoveringReady", false);
+            ghost_animator3.SetBool("walkingReady", false);
+            ghost_animator4.SetBool("scaredReady", true);
+            ghost_animator4.SetBool("recoveringReady", false);
+            ghost_animator4.SetBool("walkingReady", false);
+            AudioController.scaredReady = true;
+            ghostTimer.enabled = true;
+        }
     }
 }
