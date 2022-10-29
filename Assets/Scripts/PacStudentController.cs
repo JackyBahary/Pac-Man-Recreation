@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class PacStudentController : MonoBehaviour
@@ -10,6 +11,7 @@ public class PacStudentController : MonoBehaviour
     public TextMeshProUGUI ghostTimer;
     public new ParticleSystem particleSystem;
     public ParticleSystem wallCollidedParticles;
+    public ParticleSystem pacStudentDead;
     private ParticleSystem.EmissionModule em;
     private string lastInput = "";
     private string currentInput = "";
@@ -53,12 +55,15 @@ public class PacStudentController : MonoBehaviour
     public AudioClip movementClip;
     public AudioClip pelletEatenClip;
     public AudioClip wallBumpClip;
+    public AudioClip pacDeadClip;
     private AudioSource source;
     public Animator ghost_animator1;
     public Animator ghost_animator2;
     public Animator ghost_animator3;
     public Animator ghost_animator4;
     private float scaredTimer = 10;
+    private float deadTimer = 1;
+    public Image[] lives = new Image[3];
 
     // Start is called before the first frame update
     void Start()
@@ -111,6 +116,31 @@ public class PacStudentController : MonoBehaviour
             }
         }
 
+        //Animation for Dead PacStudent
+        if (animator.GetBool("LeftDead") == true || animator.GetBool("RightDead") == true || animator.GetBool("DownDead") == true || animator.GetBool("UpDead") == true)
+        {
+            deadTimer -= Time.deltaTime;
+            if (deadTimer < 0)
+            {
+                this.GetComponent<BoxCollider>().enabled = true;
+                animator.SetBool("LeftDead", false);
+                animator.SetBool("RightDead", false);
+                animator.SetBool("DownDead", false);
+                animator.SetBool("UpDead", false);
+                animator.SetBool("LeftReady", false);
+                animator.SetBool("RightReady", false);
+                animator.SetBool("UpReady", false);
+                animator.SetBool("DownReady", false);
+                Vector3 newPos = new Vector3(-12.5f, 13.5f, 0f);
+                pacX = -12.5f;
+                pacY = 13.5f;
+                gridRow = 1;
+                gridColumn = 1;
+                tweener.AddTween(transform, newPos, newPos, 0f);
+                deadTimer = 1;
+            }
+        }
+
         //Pausing of Particle Trail
         if (lastInput.Equals(""))
         {
@@ -160,6 +190,10 @@ public class PacStudentController : MonoBehaviour
                     animator.SetBool("RightReady", false);
                     animator.SetBool("UpReady", true);
                     animator.SetBool("DownReady", false);
+                    animator.SetBool("LeftDead", false);
+                    animator.SetBool("RightDead", false);
+                    animator.SetBool("DownDead", false);
+                    animator.SetBool("UpDead", false);
                     currentInput = lastInput;
                     Vector3 targetPos = transform.position;
                     targetPos.y = targetPos.y + 1;
@@ -304,6 +338,10 @@ public class PacStudentController : MonoBehaviour
                         animator.SetBool("RightReady", false);
                         animator.SetBool("UpReady", false);
                         animator.SetBool("DownReady", false);
+                        animator.SetBool("LeftDead", false);
+                        animator.SetBool("RightDead", false);
+                        animator.SetBool("DownDead", false);
+                        animator.SetBool("UpDead", false);
                         currentInput = lastInput;
                         Vector3 targetPos = transform.position;
                         targetPos.x = targetPos.x - 1;
@@ -462,6 +500,10 @@ public class PacStudentController : MonoBehaviour
                     animator.SetBool("RightReady", false);
                     animator.SetBool("UpReady", false);
                     animator.SetBool("DownReady", true);
+                    animator.SetBool("LeftDead", false);
+                    animator.SetBool("RightDead", false);
+                    animator.SetBool("DownDead", false);
+                    animator.SetBool("UpDead", false);
                     currentInput = lastInput;
                     Vector3 targetPos = transform.position;
                     targetPos.y = targetPos.y - 1;
@@ -606,6 +648,10 @@ public class PacStudentController : MonoBehaviour
                         animator.SetBool("RightReady", true);
                         animator.SetBool("UpReady", false);
                         animator.SetBool("DownReady", false);
+                        animator.SetBool("LeftDead", false);
+                        animator.SetBool("RightDead", false);
+                        animator.SetBool("DownDead", false);
+                        animator.SetBool("UpDead", false);
                         currentInput = lastInput;
                         Vector3 targetPos = transform.position;
                         targetPos.x = targetPos.x + 1;
@@ -754,45 +800,126 @@ public class PacStudentController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name.Contains("OutsideWall") || other.gameObject.name.Contains("InnerWall"))
+        if (other != null)
         {
-            if (lastInput == currentInput)
+            if (other.gameObject.name.Contains("OutsideWall") || other.gameObject.name.Contains("InnerWall"))
             {
-                source.PlayOneShot(wallBumpClip, 3.0f);
-                wallCollidedParticles.Play();
+                if (lastInput == currentInput)
+                {
+                    source.PlayOneShot(wallBumpClip, 3.0f);
+                    wallCollidedParticles.Play();
+                }
             }
-        }
-        else if (other.gameObject.name.Contains("NormalPellet"))
-        {
-            Destroy(other.gameObject);
-            string[] scoreTexts = score.text.Split(':');
-            int scorePoint = int.Parse(scoreTexts[1]) + 10;
-            score.text = "Score: " + scorePoint.ToString();
-        }
-        else if (other.gameObject.name.Contains("Cherry"))
-        {
-            Destroy(other.gameObject);
-            string[] scoreTexts = score.text.Split(':');
-            int scorePoint = int.Parse(scoreTexts[1]) + 100;
-            score.text = "Score: " + scorePoint.ToString();
-        }
-        else if (other.gameObject.name.Contains("PowerPellet"))
-        {
-            Destroy(other.gameObject);
-            ghost_animator1.SetBool("scaredReady", true);
-            ghost_animator1.SetBool("recoveringReady", false);
-            ghost_animator1.SetBool("walkingReady", false);
-            ghost_animator2.SetBool("scaredReady", true);
-            ghost_animator2.SetBool("recoveringReady", false);
-            ghost_animator2.SetBool("walkingReady", false);
-            ghost_animator3.SetBool("scaredReady", true);
-            ghost_animator3.SetBool("recoveringReady", false);
-            ghost_animator3.SetBool("walkingReady", false);
-            ghost_animator4.SetBool("scaredReady", true);
-            ghost_animator4.SetBool("recoveringReady", false);
-            ghost_animator4.SetBool("walkingReady", false);
-            AudioController.scaredReady = true;
-            ghostTimer.enabled = true;
+            else if (other.gameObject.name.Contains("NormalPellet"))
+            {
+                Destroy(other.gameObject);
+                string[] scoreTexts = score.text.Split(':');
+                int scorePoint = int.Parse(scoreTexts[1]) + 10;
+                score.text = "Score: " + scorePoint.ToString();
+            }
+            else if (other.gameObject.name.Contains("Cherry"))
+            {
+                Destroy(other.gameObject);
+                string[] scoreTexts = score.text.Split(':');
+                int scorePoint = int.Parse(scoreTexts[1]) + 100;
+                score.text = "Score: " + scorePoint.ToString();
+            }
+            else if (other.gameObject.name.Contains("PowerPellet"))
+            {
+                Destroy(other.gameObject);
+                ghost_animator1.SetBool("scaredReady", true);
+                ghost_animator1.SetBool("recoveringReady", false);
+                ghost_animator1.SetBool("walkingReady", false);
+                ghost_animator2.SetBool("scaredReady", true);
+                ghost_animator2.SetBool("recoveringReady", false);
+                ghost_animator2.SetBool("walkingReady", false);
+                ghost_animator3.SetBool("scaredReady", true);
+                ghost_animator3.SetBool("recoveringReady", false);
+                ghost_animator3.SetBool("walkingReady", false);
+                ghost_animator4.SetBool("scaredReady", true);
+                ghost_animator4.SetBool("recoveringReady", false);
+                ghost_animator4.SetBool("walkingReady", false);
+                AudioController.scaredReady = true;
+                ghostTimer.enabled = true;
+            }
+            else if (other.gameObject.name.Contains("Ghost") && (ghost_animator1.GetBool("scaredReady") == false) && (ghost_animator1.GetBool("recoveringReady") == false))
+            {
+                source.PlayOneShot(pacDeadClip, 3.0f);
+                pacStudentDead.Play();
+                if (animator.GetBool("LeftReady") == true)
+                {
+                    this.GetComponent<BoxCollider>().enabled = false;
+                    animator.SetBool("LeftDead", true);
+                    animator.SetBool("RightDead", false);
+                    animator.SetBool("DownDead", false);
+                    animator.SetBool("UpDead", false);
+                    animator.SetBool("LeftReady", false);
+                    animator.SetBool("RightReady", false);
+                    animator.SetBool("UpReady", false);
+                    animator.SetBool("DownReady", false);
+                }
+                else if (animator.GetBool("RightReady") == true)
+                {
+                    this.GetComponent<BoxCollider>().enabled = false;
+                    animator.SetBool("LeftDead", false);
+                    animator.SetBool("RightDead", true);
+                    animator.SetBool("DownDead", false);
+                    animator.SetBool("UpDead", false);
+                    animator.SetBool("LeftReady", false);
+                    animator.SetBool("RightReady", false);
+                    animator.SetBool("UpReady", false);
+                    animator.SetBool("DownReady", false);
+                }
+                else if (animator.GetBool("DownReady") == true)
+                {
+                    this.GetComponent<BoxCollider>().enabled = false;
+                    animator.SetBool("LeftDead", false);
+                    animator.SetBool("RightDead", false);
+                    animator.SetBool("DownDead", true);
+                    animator.SetBool("UpDead", false);
+                    animator.SetBool("LeftReady", false);
+                    animator.SetBool("RightReady", false);
+                    animator.SetBool("UpReady", false);
+                    animator.SetBool("DownReady", false);
+                }
+                else if (animator.GetBool("UpReady") == true)
+                {
+                    this.GetComponent<BoxCollider>().enabled = false;
+                    animator.SetBool("LeftDead", false);
+                    animator.SetBool("RightDead", false);
+                    animator.SetBool("DownDead", false);
+                    animator.SetBool("UpDead", true);
+                    animator.SetBool("LeftReady", false);
+                    animator.SetBool("RightReady", false);
+                    animator.SetBool("UpReady", false);
+                    animator.SetBool("DownReady", false);
+                }
+                lastInput = "";
+                currentInput = "";
+                bool lost = true;
+                while (lost)
+                {
+                    if (lives[2].enabled == true)
+                    {
+                        lives[2].enabled = false;
+                        lost = false;
+                    }
+                    else if (lives[1].enabled == true)
+                    {
+                        lives[1].enabled = false;
+                        lost = false;
+                    }
+                    else if (lives[0].enabled == true)
+                    {
+                        lives[0].enabled = false;
+                        lost = false;
+                    }
+                    else
+                    {
+                        lost = false;
+                    }
+                }
+            }
         }
     }
 }
