@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PacStudentController : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class PacStudentController : MonoBehaviour
     public TextMeshProUGUI score;
     public TextMeshProUGUI ghostTimer;
     public TextMeshProUGUI gameCountTimer;
+    public TextMeshProUGUI gameOver;
     public new ParticleSystem particleSystem;
     public ParticleSystem wallCollidedParticles;
     public ParticleSystem pacStudentDead;
@@ -62,27 +64,27 @@ public class PacStudentController : MonoBehaviour
     public Animator ghost_animator2;
     public Animator ghost_animator3;
     public Animator ghost_animator4;
-    private float scaredTimer = 20;
+    private float scaredTimer = 10;
     private float deadPacTimer = 1;
     private float deadGhostTimer1 = 5;
     private float deadGhostTimer2 = 5;
     private float deadGhostTimer3 = 5;
     private float deadGhostTimer4 = 5;
-    private float loadingTimer = 4;
+    public float loadingTimer = 4;
     private float gameTimer = 0;
+    private float gameOverTimer = 3;
     public Image[] lives = new Image[3];
     public TextMeshProUGUI[] countdown = new TextMeshProUGUI[4];
     private string minute = "";
     private string second = "";
     private string millisecond = "";
-    public bool gameTimerActive = true;
+    public static bool gameTimerActive = true;
 
     // Start is called before the first frame update
     void Start()
     {
         source = GetComponent<AudioSource>();
         em = particleSystem.emission;
-
     }
 
     // Update is called once per frame
@@ -124,6 +126,99 @@ public class PacStudentController : MonoBehaviour
             ghost_animator2.enabled = true;
             ghost_animator3.enabled = true;
             ghost_animator4.enabled = true;
+
+            //Game Over Code
+            if (gameOver.enabled == true)
+            {
+                this.GetComponent<BoxCollider>().enabled = false;
+                tweener.enabled = false;
+                em.enabled = false;
+                currentInput = "";
+                lastInput = "";
+                animator.enabled = false;
+                ghost_animator1.enabled = false;
+                ghost_animator2.enabled = false;
+                ghost_animator3.enabled = false;
+                ghost_animator4.enabled = false;
+                PacStudentController.gameTimerActive = false;
+                gameOverTimer -= Time.deltaTime;
+                if (gameOverTimer < 0)
+                {
+                    SceneManager.LoadScene(0, LoadSceneMode.Single);
+                }
+
+                //Saving Score and Game Timer Code
+
+                //Creating Keys
+                const string saveScore = "userScore";
+                const string saveTimeMinute = "userTimeMinute";
+                const string saveTimeSecond = "userTimeSecond";
+                const string saveTimeMillisecond = "userTimeMillisecond";
+
+                //Loading user's scores and times
+                string[] scores = score.text.Split(':');
+                int userScore = int.Parse(scores[1]);
+                int userMinute = int.Parse(minute);
+                int userSecond = int.Parse(second);
+                int userMillisecond = int.Parse(millisecond);
+                Debug.Log("User Score: " + userScore);
+                Debug.Log("User Minute: " + userMinute);
+                Debug.Log("User Second: " + userSecond);
+                Debug.Log("User Millisecond: " + userMillisecond);
+
+                //Loading saved High Score and Times
+                int userSavedScore = PlayerPrefs.GetInt(saveScore);
+                int userSavedMinute = PlayerPrefs.GetInt(saveTimeMinute);
+                int userSavedSecond = PlayerPrefs.GetInt(saveTimeSecond);
+                int userSavedMillisecond = PlayerPrefs.GetInt(saveTimeMillisecond);
+                Debug.Log("Saved Score: " + userSavedScore);
+                Debug.Log("Saved Minute: " + userSavedMinute);
+                Debug.Log("Saved Second: " + userSavedSecond);
+                Debug.Log("Saved Millisecond: " + userSavedMillisecond);
+
+                //Logic
+                if (userSavedScore < userScore) //If saved score is lower than current score
+                {
+                    PlayerPrefs.SetInt(saveScore, userScore);
+                    PlayerPrefs.SetInt(saveTimeMinute, userMinute);
+                    PlayerPrefs.SetInt(saveTimeSecond, userSecond);
+                    PlayerPrefs.SetInt(saveTimeMillisecond, userMillisecond);
+                    PlayerPrefs.Save();
+                }
+                else if (userSavedScore == userScore) //If saved score is equal to current score
+                {
+                    if (userSavedMinute > userMinute) //If saved minute is greater than current minute
+                    {
+                        PlayerPrefs.SetInt(saveScore, userScore);
+                        PlayerPrefs.SetInt(saveTimeMinute, userMinute);
+                        PlayerPrefs.SetInt(saveTimeSecond, userSecond);
+                        PlayerPrefs.SetInt(saveTimeMillisecond, userMillisecond);
+                        PlayerPrefs.Save();
+                    }
+                    else if (userSavedMinute == userMinute) //If saved minute is equal to current minute
+                    {
+                        if (userSavedSecond > userSecond) //If saved second is greater than current second
+                        {
+                            PlayerPrefs.SetInt(saveScore, userScore);
+                            PlayerPrefs.SetInt(saveTimeMinute, userMinute);
+                            PlayerPrefs.SetInt(saveTimeSecond, userSecond);
+                            PlayerPrefs.SetInt(saveTimeMillisecond, userMillisecond);
+                            PlayerPrefs.Save();
+                        }
+                        else if (userSavedSecond == userSecond) //If saved second is equal to current second
+                        {
+                            if (userSavedMillisecond > userMillisecond) //If saved millisecond is greater than current millisecond
+                            {
+                                PlayerPrefs.SetInt(saveScore, userScore);
+                                PlayerPrefs.SetInt(saveTimeMinute, userMinute);
+                                PlayerPrefs.SetInt(saveTimeSecond, userSecond);
+                                PlayerPrefs.SetInt(saveTimeMillisecond, userMillisecond);
+                                PlayerPrefs.Save();
+                            }
+                        }
+                    }
+                }
+            }
 
             //Game Timer Code
             if (gameTimerActive) {
@@ -1048,6 +1143,7 @@ public class PacStudentController : MonoBehaviour
                     else if (lives[0].enabled == true)
                     {
                         lives[0].enabled = false;
+                        gameOver.enabled = true;
                         lost = false;
                     }
                     else
