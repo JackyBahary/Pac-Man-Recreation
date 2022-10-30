@@ -61,13 +61,15 @@ public class PacStudentController : MonoBehaviour
     public Animator ghost_animator2;
     public Animator ghost_animator3;
     public Animator ghost_animator4;
-    private float scaredTimer = 11;
+    private float scaredTimer = 20;
     private float deadPacTimer = 1;
     private float deadGhostTimer1 = 5;
     private float deadGhostTimer2 = 5;
     private float deadGhostTimer3 = 5;
     private float deadGhostTimer4 = 5;
+    private float loadingTimer = 4;
     public Image[] lives = new Image[3];
+    public TextMeshProUGUI[] countdown = new TextMeshProUGUI[4];
 
     // Start is called before the first frame update
     void Start()
@@ -79,636 +81,215 @@ public class PacStudentController : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {                
-        //Ghost Scared Timer
-        if (ghostTimer.isActiveAndEnabled)
-        {
-            ghostTimer.text = "Scared Timer: " + (int)scaredTimer;
-            scaredTimer -= Time.deltaTime;
-            if (scaredTimer < 4)
-            {
-                ghost_animator1.SetBool("scaredReady", false);
-                ghost_animator1.SetBool("recoveringReady", true);
-                ghost_animator1.SetBool("walkingReady", false);
-                ghost_animator2.SetBool("scaredReady", false);
-                ghost_animator2.SetBool("recoveringReady", true);
-                ghost_animator2.SetBool("walkingReady", false);
-                ghost_animator3.SetBool("scaredReady", false);
-                ghost_animator3.SetBool("recoveringReady", true);
-                ghost_animator3.SetBool("walkingReady", false);
-                ghost_animator4.SetBool("scaredReady", false);
-                ghost_animator4.SetBool("recoveringReady", true);
-                ghost_animator4.SetBool("walkingReady", false);
-            }
-            if (scaredTimer < 1)
-            {
-                ghost_animator1.SetBool("scaredReady", false);
-                ghost_animator1.SetBool("recoveringReady", false);
-                ghost_animator1.SetBool("walkingReady", true);
-                ghost_animator2.SetBool("scaredReady", false);
-                ghost_animator2.SetBool("recoveringReady", false);
-                ghost_animator2.SetBool("walkingReady", true);
-                ghost_animator3.SetBool("scaredReady", false);
-                ghost_animator3.SetBool("recoveringReady", false);
-                ghost_animator3.SetBool("walkingReady", true);
-                ghost_animator4.SetBool("scaredReady", false);
-                ghost_animator4.SetBool("recoveringReady", false);
-                ghost_animator4.SetBool("walkingReady", true);
-                ghostTimer.enabled = false;
-                scaredTimer = 10;
-                AudioController.scaredReady = false;
-                AudioController.deadReady = false;
-                AudioController.walkReady = true;
-            }
-        }
-
-        //Animation for Dead PacStudent
-        if (animator.GetBool("LeftDead") == true || animator.GetBool("RightDead") == true || animator.GetBool("DownDead") == true || animator.GetBool("UpDead") == true)
-        {
-            deadPacTimer -= Time.deltaTime;
-            if (deadPacTimer < 0)
-            {
-                this.GetComponent<BoxCollider>().enabled = true;
-                animator.SetBool("LeftDead", false);
-                animator.SetBool("RightDead", false);
-                animator.SetBool("DownDead", false);
-                animator.SetBool("UpDead", false);
-                animator.SetBool("LeftReady", false);
-                animator.SetBool("RightReady", false);
-                animator.SetBool("UpReady", false);
-                animator.SetBool("DownReady", false);
-                Vector3 newPos = new Vector3(-12.5f, 13.5f, 0f);
-                pacX = -12.5f;
-                pacY = 13.5f;
-                gridRow = 1;
-                gridColumn = 1;
-                tweener.AddTween(transform, newPos, newPos, 0f);
-                deadPacTimer = 1;
-            }
-        }
-
-        //Animation for Dead Ghost 1
-        if (ghost_animator1.GetBool("deadReady") == true)
-        {
-            deadGhostTimer1 -= Time.deltaTime;
-            if (deadGhostTimer1 < 0)
-            {
-                ghost_animator1.SetBool("deadReady", false);
-                ghost_animator1.SetBool("scaredReady", false);
-                ghost_animator1.SetBool("recoveringReady", false);
-                ghost_animator1.SetBool("walkingReady", true);
-                deadGhostTimer1 = 5;
-            }
-        }
-
-        //Animation for Dead Ghost 2
-        if (ghost_animator2.GetBool("deadReady") == true)
-        {
-            deadGhostTimer2 -= Time.deltaTime;
-            if (deadGhostTimer2 < 0)
-            {
-                ghost_animator2.SetBool("deadReady", false);
-                ghost_animator2.SetBool("scaredReady", false);
-                ghost_animator2.SetBool("recoveringReady", false);
-                ghost_animator2.SetBool("walkingReady", true);
-                deadGhostTimer2 = 5;
-            }
-        }
-
-        //Animation for Dead Ghost 3
-        if (ghost_animator3.GetBool("deadReady") == true)
-        {
-            deadGhostTimer3 -= Time.deltaTime;
-            if (deadGhostTimer3 < 0)
-            {
-                ghost_animator3.SetBool("deadReady", false);
-                ghost_animator3.SetBool("scaredReady", false);
-                ghost_animator3.SetBool("recoveringReady", false);
-                ghost_animator3.SetBool("walkingReady", true);
-                deadGhostTimer3 = 5;
-            }
-        }
-
-        //Animation for Dead Ghost 4
-        if (ghost_animator4.GetBool("deadReady") == true)
-        {
-            deadGhostTimer4 -= Time.deltaTime;
-            if (deadGhostTimer4 < 0)
-            {
-                ghost_animator4.SetBool("deadReady", false);
-                ghost_animator4.SetBool("scaredReady", false);
-                ghost_animator4.SetBool("recoveringReady", false);
-                ghost_animator4.SetBool("walkingReady", true);
-                deadGhostTimer4 = 5;
-            }
-        }
-
-        //Pausing of Particle Trail
-        if (lastInput.Equals(""))
+    {
+        //Loading Timer
+        loadingTimer -= Time.deltaTime;
+        if (loadingTimer > 0)
         {
             em.enabled = false;
+            currentInput = "";
+            lastInput = "";
+            animator.enabled = false;
+            ghost_animator1.enabled = false;
+            ghost_animator2.enabled = false;
+            ghost_animator3.enabled = false;
+            ghost_animator4.enabled = false;
         }
-        else if (animator.speed > 0)
+        if (loadingTimer < 3)
         {
-            em.enabled = true;
+            countdown[0].enabled = false;
+            countdown[1].enabled = true;
         }
-        else
+        if (loadingTimer < 2)
         {
-            em.enabled = false;
+            countdown[1].enabled = false;
+            countdown[2].enabled = true;
         }
+        if (loadingTimer < 1)
+        {
+            countdown[2].enabled = false;
+            countdown[3].enabled = true;
+        }
+        if (loadingTimer < 0)
+        {
+            countdown[3].enabled = false;
+            animator.enabled = true;
+            ghost_animator1.enabled = true;
+            ghost_animator2.enabled = true;
+            ghost_animator3.enabled = true;
+            ghost_animator4.enabled = true;
 
-        //Storing Inputs into "lastInput" variable
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            lastInput = "w";
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            lastInput = "a";
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            lastInput = "s";
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            lastInput = "d";
-        }
-
-        //Lerping Code
-        if (!tweener.TweenExists(transform)) //If PacStudent is not moving
-        {
-            if (lastInput.Equals("w")) //If last input is "w"
+            //Ghost Scared Timer
+            if (ghostTimer.isActiveAndEnabled)
             {
-                if (levelMap[gridRow - 1, gridColumn] == 5 || levelMap[gridRow - 1, gridColumn] == 6 || levelMap[gridRow - 1, gridColumn] == 0) //If the top of the pacStudent is a normal pellet, bonus pellet or empty space
+                ghostTimer.text = "Scared Timer: " + (int)scaredTimer;
+                scaredTimer -= Time.deltaTime;
+                if (scaredTimer < 4)
                 {
-                    source.PlayOneShot(movementClip);
-                    if (levelMap[gridRow - 1, gridColumn] == 5 || levelMap[gridRow - 1, gridColumn] == 6)
-                    {
-                        source.PlayOneShot(pelletEatenClip);
-                    }
-                    animator.speed = 1;
-                    animator.SetBool("LeftReady", false);
-                    animator.SetBool("RightReady", false);
-                    animator.SetBool("UpReady", true);
-                    animator.SetBool("DownReady", false);
+                    ghost_animator1.SetBool("scaredReady", false);
+                    ghost_animator1.SetBool("recoveringReady", true);
+                    ghost_animator1.SetBool("walkingReady", false);
+                    ghost_animator2.SetBool("scaredReady", false);
+                    ghost_animator2.SetBool("recoveringReady", true);
+                    ghost_animator2.SetBool("walkingReady", false);
+                    ghost_animator3.SetBool("scaredReady", false);
+                    ghost_animator3.SetBool("recoveringReady", true);
+                    ghost_animator3.SetBool("walkingReady", false);
+                    ghost_animator4.SetBool("scaredReady", false);
+                    ghost_animator4.SetBool("recoveringReady", true);
+                    ghost_animator4.SetBool("walkingReady", false);
+                }
+                if (scaredTimer < 1)
+                {
+                    ghost_animator1.SetBool("scaredReady", false);
+                    ghost_animator1.SetBool("recoveringReady", false);
+                    ghost_animator1.SetBool("walkingReady", true);
+                    ghost_animator2.SetBool("scaredReady", false);
+                    ghost_animator2.SetBool("recoveringReady", false);
+                    ghost_animator2.SetBool("walkingReady", true);
+                    ghost_animator3.SetBool("scaredReady", false);
+                    ghost_animator3.SetBool("recoveringReady", false);
+                    ghost_animator3.SetBool("walkingReady", true);
+                    ghost_animator4.SetBool("scaredReady", false);
+                    ghost_animator4.SetBool("recoveringReady", false);
+                    ghost_animator4.SetBool("walkingReady", true);
+                    ghostTimer.enabled = false;
+                    scaredTimer = 10;
+                    AudioController.scaredReady = false;
+                    AudioController.deadReady = false;
+                    AudioController.walkReady = true;
+                }
+            }
+
+            //Animation for Dead PacStudent
+            if (animator.GetBool("LeftDead") == true || animator.GetBool("RightDead") == true || animator.GetBool("DownDead") == true || animator.GetBool("UpDead") == true)
+            {
+                deadPacTimer -= Time.deltaTime;
+                if (deadPacTimer < 0)
+                {
+                    this.GetComponent<BoxCollider>().enabled = true;
                     animator.SetBool("LeftDead", false);
                     animator.SetBool("RightDead", false);
                     animator.SetBool("DownDead", false);
                     animator.SetBool("UpDead", false);
-                    currentInput = lastInput;
-                    Vector3 targetPos = transform.position;
-                    targetPos.y = targetPos.y + 1;
-                    pacY += 1;
-                    gridRow -= 1;
-                    tweener.AddTween(transform, transform.position, targetPos, 0.5f);
-                    Debug.Log("Grid Row: " + gridRow);
-                    Debug.Log("Grid Column: " + gridColumn);
-                    Debug.Log("pacX: " + pacX);
-                    Debug.Log("pacY: " + pacY);
-                }
-                else //If the top of pacStudent is not walkable
-                {
-                    if (currentInput.Equals("w")) //If current input is "w"
-                    {
-                        if (levelMap[gridRow - 1, gridColumn] == 5 || levelMap[gridRow - 1, gridColumn] == 6 || levelMap[gridRow - 1, gridColumn] == 0) //If the top of pacStudent is a normal pellet, bonus pellet or empty space
-                        {
-                            source.PlayOneShot(movementClip);
-                            if (levelMap[gridRow - 1, gridColumn] == 5 || levelMap[gridRow - 1, gridColumn] == 6)
-                            {
-                                source.PlayOneShot(pelletEatenClip);
-                            }
-                            Vector3 targetPos = transform.position;
-                            targetPos.y = targetPos.y + 1;
-                            pacY += 1;
-                            gridRow -= 1;
-                            tweener.AddTween(transform, transform.position, targetPos, 0.5f);
-                            Debug.Log("Grid Row: " + gridRow);
-                            Debug.Log("Grid Column: " + gridColumn);
-                            Debug.Log("pacX: " + pacX);
-                            Debug.Log("pacY: " + pacY);
-                        }
-                        else //If the top is not walkable
-                        {
-                            animator.speed = 0;
-                            Debug.Log("Grid Row: " + gridRow);
-                            Debug.Log("Grid Column: " + gridColumn);
-                            Debug.Log("pacX: " + pacX);
-                            Debug.Log("pacY: " + pacY);
-                        }
-                    }
-                    if (currentInput.Equals("a")) //If current input is "a"
-                    {
-                        if (levelMap[gridRow, gridColumn - 1] == 5 || levelMap[gridRow, gridColumn - 1] == 6 || levelMap[gridRow, gridColumn - 1] == 0) //If the left of pacStudent is a normal pellet, bonus pellet or empty space
-                        {
-                            source.PlayOneShot(movementClip);
-                            if (levelMap[gridRow, gridColumn - 1] == 5 || levelMap[gridRow, gridColumn - 1] == 6)
-                            {
-                                source.PlayOneShot(pelletEatenClip);
-                            }
-                            Vector3 targetPos = transform.position;
-                            targetPos.x = targetPos.x - 1;
-                            pacX -= 1;
-                            gridColumn -= 1;
-                            tweener.AddTween(transform, transform.position, targetPos, 0.5f);
-                            Debug.Log("Grid Row: " + gridRow);
-                            Debug.Log("Grid Column: " + gridColumn);
-                            Debug.Log("pacX: " + pacX);
-                            Debug.Log("pacY: " + pacY);
-                        }
-                        else //If the left is not walkable
-                        {
-                            animator.speed = 0;
-                            Debug.Log("Grid Row: " + gridRow);
-                            Debug.Log("Grid Column: " + gridColumn);
-                            Debug.Log("pacX: " + pacX);
-                            Debug.Log("pacY: " + pacY);
-                        }
-                    }
-                    if (currentInput.Equals("s")) //If current input is "s"
-                    {
-                        if (levelMap[gridRow + 1, gridColumn] == 5 || levelMap[gridRow + 1, gridColumn] == 6 || levelMap[gridRow + 1, gridColumn] == 0) //If the bottom of pacStudent is a normal pellet, bonus pellet or empty space
-                        {
-                            source.PlayOneShot(movementClip);
-                            if (levelMap[gridRow + 1, gridColumn] == 5 || levelMap[gridRow + 1, gridColumn] == 6)
-                            {
-                                source.PlayOneShot(pelletEatenClip);
-                            }
-                            Vector3 targetPos = transform.position;
-                            targetPos.y = targetPos.y - 1;
-                            pacY -= 1;
-                            gridRow += 1;
-                            tweener.AddTween(transform, transform.position, targetPos, 0.5f);
-                            Debug.Log("Grid Row: " + gridRow);
-                            Debug.Log("Grid Column: " + gridColumn);
-                            Debug.Log("pacX: " + pacX);
-                            Debug.Log("pacY: " + pacY);
-                        }
-                        else //If the bottom is not walkable
-                        {
-                            animator.speed = 0;
-                            Debug.Log("Grid Row: " + gridRow);
-                            Debug.Log("Grid Column: " + gridColumn);
-                            Debug.Log("pacX: " + pacX);
-                            Debug.Log("pacY: " + pacY);
-                        }
-                    }
-                    if (currentInput.Equals("d")) //If current input is "d"
-                    {
-                        if (levelMap[gridRow, gridColumn + 1] == 5 || levelMap[gridRow, gridColumn + 1] == 6 || levelMap[gridRow, gridColumn + 1] == 0) //If the right of the pacStudent is a normal pellet, bonus pellet or empty space
-                        {
-                            source.PlayOneShot(movementClip);
-                            if (levelMap[gridRow, gridColumn + 1] == 5 || levelMap[gridRow, gridColumn + 1] == 6)
-                            {
-                                source.PlayOneShot(pelletEatenClip);
-                            }
-                            Vector3 targetPos = transform.position;
-                            targetPos.x = targetPos.x + 1;
-                            pacX += 1;
-                            gridColumn += 1;
-                            tweener.AddTween(transform, transform.position, targetPos, 0.5f);
-                            Debug.Log("Grid Row: " + gridRow);
-                            Debug.Log("Grid Column: " + gridColumn);
-                            Debug.Log("pacX: " + pacX);
-                            Debug.Log("pacY: " + pacY);
-                        }
-                        else //If the right is not walkable
-                        {
-                            animator.speed = 0;
-                            Debug.Log("Grid Row: " + gridRow);
-                            Debug.Log("Grid Column: " + gridColumn);
-                            Debug.Log("pacX: " + pacX);
-                            Debug.Log("pacY: " + pacY);
-                        }
-                    }
-                }
-            }
-
-            if (lastInput.Equals("a")) //If last input is "a"
-            {
-                if (gridColumn - 1 >= 0) //If left is not out of bounds
-                {
-                    if (levelMap[gridRow, gridColumn - 1] == 5 || levelMap[gridRow, gridColumn - 1] == 6 || levelMap[gridRow, gridColumn - 1] == 0) //If the left of pacStudent is a normal pellet, bonus pellet or empty space
-                    {
-                        source.PlayOneShot(movementClip);
-                        if (levelMap[gridRow, gridColumn - 1] == 5 || levelMap[gridRow, gridColumn - 1] == 6)
-                        {
-                            source.PlayOneShot(pelletEatenClip);
-                        }
-                        animator.speed = 1;
-                        animator.SetBool("LeftReady", true);
-                        animator.SetBool("RightReady", false);
-                        animator.SetBool("UpReady", false);
-                        animator.SetBool("DownReady", false);
-                        animator.SetBool("LeftDead", false);
-                        animator.SetBool("RightDead", false);
-                        animator.SetBool("DownDead", false);
-                        animator.SetBool("UpDead", false);
-                        currentInput = lastInput;
-                        Vector3 targetPos = transform.position;
-                        targetPos.x = targetPos.x - 1;
-                        pacX -= 1;
-                        gridColumn -= 1;
-                        tweener.AddTween(transform, transform.position, targetPos, 0.5f);
-                        Debug.Log("Grid Row: " + gridRow);
-                        Debug.Log("Grid Column: " + gridColumn);
-                        Debug.Log("pacX: " + pacX);
-                        Debug.Log("pacY: " + pacY);
-                    }
-                    else //If the left of pacStudent is not walkable
-                    {
-                        if (currentInput.Equals("w")) //If current input is "w"
-                        {
-                            if (levelMap[gridRow - 1, gridColumn] == 5 || levelMap[gridRow - 1, gridColumn] == 6 || levelMap[gridRow - 1, gridColumn] == 0) //If the top of pacStudent is a normal pellet, bonus pellet or empty space
-                            {
-                                source.PlayOneShot(movementClip);
-                                if (levelMap[gridRow - 1, gridColumn] == 5 || levelMap[gridRow - 1, gridColumn] == 6)
-                                {
-                                    source.PlayOneShot(pelletEatenClip);
-                                }
-                                Vector3 targetPos = transform.position;
-                                targetPos.y = targetPos.y + 1;
-                                pacY += 1;
-                                gridRow -= 1;
-                                tweener.AddTween(transform, transform.position, targetPos, 0.5f);
-                                Debug.Log("Grid Row: " + gridRow);
-                                Debug.Log("Grid Column: " + gridColumn);
-                                Debug.Log("pacX: " + pacX);
-                                Debug.Log("pacY: " + pacY);
-                            }
-                            else //If the top is not walkable
-                            {
-                                animator.speed = 0;
-                                Debug.Log("Grid Row: " + gridRow);
-                                Debug.Log("Grid Column: " + gridColumn);
-                                Debug.Log("pacX: " + pacX);
-                                Debug.Log("pacY: " + pacY);
-                            }
-                        }
-                        if (currentInput.Equals("a")) //If current input is "a"
-                        {
-                            if (levelMap[gridRow, gridColumn - 1] == 5 || levelMap[gridRow, gridColumn - 1] == 6 || levelMap[gridRow, gridColumn - 1] == 0) //If the left of pacStudent is a normal pellet, bonus pellet or empty space
-                            {
-                                source.PlayOneShot(movementClip);
-                                if (levelMap[gridRow, gridColumn - 1] == 5 || levelMap[gridRow, gridColumn - 1] == 6)
-                                {
-                                    source.PlayOneShot(pelletEatenClip);
-                                }
-                                Vector3 targetPos = transform.position;
-                                targetPos.x = targetPos.x - 1;
-                                pacX -= 1;
-                                gridColumn -= 1;
-                                tweener.AddTween(transform, transform.position, targetPos, 0.5f);
-                                Debug.Log("Grid Row: " + gridRow);
-                                Debug.Log("Grid Column: " + gridColumn);
-                                Debug.Log("pacX: " + pacX);
-                                Debug.Log("pacY: " + pacY);
-                            }
-                            else //If the left is not walkable
-                            {
-                                animator.speed = 0;
-                                Debug.Log("Grid Row: " + gridRow);
-                                Debug.Log("Grid Column: " + gridColumn);
-                                Debug.Log("pacX: " + pacX);
-                                Debug.Log("pacY: " + pacY);
-                            }
-                        }
-                        if (currentInput.Equals("s")) //If current input is "s"
-                        {
-                            if (levelMap[gridRow + 1, gridColumn] == 5 || levelMap[gridRow + 1, gridColumn] == 6 || levelMap[gridRow + 1, gridColumn] == 0) //If the bottom of pacStudent is a normal pellet, bonus pellet or empty space
-                            {
-                                source.PlayOneShot(movementClip);
-                                if (levelMap[gridRow + 1, gridColumn] == 5 || levelMap[gridRow + 1, gridColumn] == 6)
-                                {
-                                    source.PlayOneShot(pelletEatenClip);
-                                }
-                                Vector3 targetPos = transform.position;
-                                targetPos.y = targetPos.y - 1;
-                                pacY -= 1;
-                                gridRow += 1;
-                                tweener.AddTween(transform, transform.position, targetPos, 0.5f);
-                                Debug.Log("Grid Row: " + gridRow);
-                                Debug.Log("Grid Column: " + gridColumn);
-                                Debug.Log("pacX: " + pacX);
-                                Debug.Log("pacY: " + pacY);
-                            }
-                            else //If the bottom is not walkable
-                            {
-                                animator.speed = 0;
-                                Debug.Log("Grid Row: " + gridRow);
-                                Debug.Log("Grid Column: " + gridColumn);
-                                Debug.Log("pacX: " + pacX);
-                                Debug.Log("pacY: " + pacY);
-                            }
-                        }
-                        if (currentInput.Equals("d")) //If current input is "d"
-                        {
-                            if (levelMap[gridRow, gridColumn + 1] == 5 || levelMap[gridRow, gridColumn + 1] == 6 || levelMap[gridRow, gridColumn + 1] == 0) //If the right of the pacStudent is a normal pellet, bonus pellet or empty space
-                            {
-                                source.PlayOneShot(movementClip);
-                                if (levelMap[gridRow, gridColumn + 1] == 5 || levelMap[gridRow, gridColumn + 1] == 6)
-                                {
-                                    source.PlayOneShot(pelletEatenClip);
-                                }
-                                Vector3 targetPos = transform.position;
-                                targetPos.x = targetPos.x + 1;
-                                pacX += 1;
-                                gridColumn += 1;
-                                tweener.AddTween(transform, transform.position, targetPos, 0.5f);
-                                Debug.Log("Grid Row: " + gridRow);
-                                Debug.Log("Grid Column: " + gridColumn);
-                                Debug.Log("pacX: " + pacX);
-                                Debug.Log("pacY: " + pacY);
-                            }
-                            else //If the right is not walkable
-                            {
-                                animator.speed = 0;
-                                Debug.Log("Grid Row: " + gridRow);
-                                Debug.Log("Grid Column: " + gridColumn);
-                                Debug.Log("pacX: " + pacX);
-                                Debug.Log("pacY: " + pacY);
-                            }
-                        }
-                    }
-                }
-                else //If left is out of bounds
-                {
-                    animator.speed = 0;
-                    source.PlayOneShot(movementClip);
-                    Vector3 newPos = new Vector3(-transform.position.x, transform.position.y, transform.position.z);
-                    Vector3 targetPos = newPos;
-                    targetPos.x = targetPos.x - 1;
-                    pacX = 12.5f;
-                    gridColumn = 26;
-                    tweener.AddTween(transform, newPos, targetPos, 0.5f);
-                    Debug.Log("Grid Row: " + gridRow);
-                    Debug.Log("Grid Column: " + gridColumn);
-                    Debug.Log("pacX: " + pacX);
-                    Debug.Log("pacY: " + pacY);
-                }
-            }
-
-            if (lastInput.Equals("s")) //If last input is "s"
-            {
-                if (levelMap[gridRow + 1, gridColumn] == 5 || levelMap[gridRow + 1, gridColumn] == 6 || levelMap[gridRow + 1, gridColumn] == 0) //If the bottom of pacStudent is a normal pellet, bonus pellet or empty space
-                {
-                    source.PlayOneShot(movementClip);
-                    if (levelMap[gridRow + 1, gridColumn] == 5 || levelMap[gridRow + 1, gridColumn] == 6)
-                    {
-                        source.PlayOneShot(pelletEatenClip);
-                    }
-                    animator.speed = 1;
                     animator.SetBool("LeftReady", false);
                     animator.SetBool("RightReady", false);
                     animator.SetBool("UpReady", false);
-                    animator.SetBool("DownReady", true);
-                    animator.SetBool("LeftDead", false);
-                    animator.SetBool("RightDead", false);
-                    animator.SetBool("DownDead", false);
-                    animator.SetBool("UpDead", false);
-                    currentInput = lastInput;
-                    Vector3 targetPos = transform.position;
-                    targetPos.y = targetPos.y - 1;
-                    pacY -= 1;
-                    gridRow += 1;
-                    tweener.AddTween(transform, transform.position, targetPos, 0.5f);
-                    Debug.Log("Grid Row: " + gridRow);
-                    Debug.Log("Grid Column: " + gridColumn);
-                    Debug.Log("pacX: " + pacX);
-                    Debug.Log("pacY: " + pacY);
-                }
-                else //If the bottom of pacStudent is not walkable
-                {
-                    if (currentInput.Equals("w")) //If current input is "w"
-                    {
-                        if (levelMap[gridRow - 1, gridColumn] == 5 || levelMap[gridRow - 1, gridColumn] == 6 || levelMap[gridRow - 1, gridColumn] == 0) //If the top of pacStudent is a normal pellet, bonus pellet or empty space
-                        {
-                            source.PlayOneShot(movementClip);
-                            if (levelMap[gridRow - 1, gridColumn] == 5 || levelMap[gridRow - 1, gridColumn] == 6)
-                            {
-                                source.PlayOneShot(pelletEatenClip);
-                            }
-                            Vector3 targetPos = transform.position;
-                            targetPos.y = targetPos.y + 1;
-                            pacY += 1;
-                            gridRow -= 1;
-                            tweener.AddTween(transform, transform.position, targetPos, 0.5f);
-                            Debug.Log("Grid Row: " + gridRow);
-                            Debug.Log("Grid Column: " + gridColumn);
-                            Debug.Log("pacX: " + pacX);
-                            Debug.Log("pacY: " + pacY);
-                        }
-                        else //If the top is not walkable
-                        {
-                            animator.speed = 0;
-                            Debug.Log("Grid Row: " + gridRow);
-                            Debug.Log("Grid Column: " + gridColumn);
-                            Debug.Log("pacX: " + pacX);
-                            Debug.Log("pacY: " + pacY);
-                        }
-                    }
-                    if (currentInput.Equals("a")) //If current input is "a"
-                    {
-                        if (levelMap[gridRow, gridColumn - 1] == 5 || levelMap[gridRow, gridColumn - 1] == 6 || levelMap[gridRow, gridColumn - 1] == 0) //If the left of pacStudent is a normal pellet, bonus pellet or empty space
-                        {
-                            source.PlayOneShot(movementClip);
-                            if (levelMap[gridRow, gridColumn - 1] == 5 || levelMap[gridRow, gridColumn - 1] == 6)
-                            {
-                                source.PlayOneShot(pelletEatenClip);
-                            }
-                            Vector3 targetPos = transform.position;
-                            targetPos.x = targetPos.x - 1;
-                            pacX -= 1;
-                            gridColumn -= 1;
-                            tweener.AddTween(transform, transform.position, targetPos, 0.5f);
-                            Debug.Log("Grid Row: " + gridRow);
-                            Debug.Log("Grid Column: " + gridColumn);
-                            Debug.Log("pacX: " + pacX);
-                            Debug.Log("pacY: " + pacY);
-                        }
-                        else //If the left is not walkable
-                        {
-                            animator.speed = 0;
-                            Debug.Log("Grid Row: " + gridRow);
-                            Debug.Log("Grid Column: " + gridColumn);
-                            Debug.Log("pacX: " + pacX);
-                            Debug.Log("pacY: " + pacY);
-                        }
-                    }
-                    if (currentInput.Equals("s")) //If current input is "s"
-                    {
-                        if (levelMap[gridRow + 1, gridColumn] == 5 || levelMap[gridRow + 1, gridColumn] == 6 || levelMap[gridRow + 1, gridColumn] == 0) //If the bottom of pacStudent is a normal pellet, bonus pellet or empty space
-                        {
-                            source.PlayOneShot(movementClip);
-                            if (levelMap[gridRow + 1, gridColumn] == 5 || levelMap[gridRow + 1, gridColumn] == 6)
-                            {
-                                source.PlayOneShot(pelletEatenClip);
-                            }
-                            Vector3 targetPos = transform.position;
-                            targetPos.y = targetPos.y - 1;
-                            pacY -= 1;
-                            gridRow += 1;
-                            tweener.AddTween(transform, transform.position, targetPos, 0.5f);
-                            Debug.Log("Grid Row: " + gridRow);
-                            Debug.Log("Grid Column: " + gridColumn);
-                            Debug.Log("pacX: " + pacX);
-                            Debug.Log("pacY: " + pacY);
-                        }
-                        else //If the bottom is not walkable
-                        {
-                            animator.speed = 0;
-                            Debug.Log("Grid Row: " + gridRow);
-                            Debug.Log("Grid Column: " + gridColumn);
-                            Debug.Log("pacX: " + pacX);
-                            Debug.Log("pacY: " + pacY);
-                        }
-                    }
-                    if (currentInput.Equals("d")) //If current input is "d"
-                    {
-                        if (levelMap[gridRow, gridColumn + 1] == 5 || levelMap[gridRow, gridColumn + 1] == 6 || levelMap[gridRow, gridColumn + 1] == 0) //If the right of the pacStudent is a normal pellet, bonus pellet or empty space
-                        {
-                            source.PlayOneShot(movementClip);
-                            if (levelMap[gridRow, gridColumn + 1] == 5 || levelMap[gridRow, gridColumn + 1] == 6)
-                            {
-                                source.PlayOneShot(pelletEatenClip);
-                            }
-                            Vector3 targetPos = transform.position;
-                            targetPos.x = targetPos.x + 1;
-                            pacX += 1;
-                            gridColumn += 1;
-                            tweener.AddTween(transform, transform.position, targetPos, 0.5f);
-                            Debug.Log("Grid Row: " + gridRow);
-                            Debug.Log("Grid Column: " + gridColumn);
-                            Debug.Log("pacX: " + pacX);
-                            Debug.Log("pacY: " + pacY);
-                        }
-                        else //If the right is not walkable
-                        {
-                            animator.speed = 0;
-                            Debug.Log("Grid Row: " + gridRow);
-                            Debug.Log("Grid Column: " + gridColumn);
-                            Debug.Log("pacX: " + pacX);
-                            Debug.Log("pacY: " + pacY);
-                        }
-                    }
+                    animator.SetBool("DownReady", false);
+                    Vector3 newPos = new Vector3(-12.5f, 13.5f, 0f);
+                    pacX = -12.5f;
+                    pacY = 13.5f;
+                    gridRow = 1;
+                    gridColumn = 1;
+                    tweener.AddTween(transform, newPos, newPos, 0f);
+                    deadPacTimer = 1;
                 }
             }
 
-            if (lastInput.Equals("d")) //If last input is "d"
+            //Animation for Dead Ghost 1
+            if (ghost_animator1.GetBool("deadReady") == true)
             {
-                if (gridColumn + 1 <= (levelMap.GetLength(1) - 1)) //If the right is not out of bounds
+                deadGhostTimer1 -= Time.deltaTime;
+                if (deadGhostTimer1 < 0)
                 {
-                    if (levelMap[gridRow, gridColumn + 1] == 5 || levelMap[gridRow, gridColumn + 1] == 6 || levelMap[gridRow, gridColumn + 1] == 0) //If the right of the pacStudent is a normal pellet, bonus pellet or empty space
+                    ghost_animator1.SetBool("deadReady", false);
+                    ghost_animator1.SetBool("scaredReady", false);
+                    ghost_animator1.SetBool("recoveringReady", false);
+                    ghost_animator1.SetBool("walkingReady", true);
+                    deadGhostTimer1 = 5;
+                }
+            }
+
+            //Animation for Dead Ghost 2
+            if (ghost_animator2.GetBool("deadReady") == true)
+            {
+                deadGhostTimer2 -= Time.deltaTime;
+                if (deadGhostTimer2 < 0)
+                {
+                    ghost_animator2.SetBool("deadReady", false);
+                    ghost_animator2.SetBool("scaredReady", false);
+                    ghost_animator2.SetBool("recoveringReady", false);
+                    ghost_animator2.SetBool("walkingReady", true);
+                    deadGhostTimer2 = 5;
+                }
+            }
+
+            //Animation for Dead Ghost 3
+            if (ghost_animator3.GetBool("deadReady") == true)
+            {
+                deadGhostTimer3 -= Time.deltaTime;
+                if (deadGhostTimer3 < 0)
+                {
+                    ghost_animator3.SetBool("deadReady", false);
+                    ghost_animator3.SetBool("scaredReady", false);
+                    ghost_animator3.SetBool("recoveringReady", false);
+                    ghost_animator3.SetBool("walkingReady", true);
+                    deadGhostTimer3 = 5;
+                }
+            }
+
+            //Animation for Dead Ghost 4
+            if (ghost_animator4.GetBool("deadReady") == true)
+            {
+                deadGhostTimer4 -= Time.deltaTime;
+                if (deadGhostTimer4 < 0)
+                {
+                    ghost_animator4.SetBool("deadReady", false);
+                    ghost_animator4.SetBool("scaredReady", false);
+                    ghost_animator4.SetBool("recoveringReady", false);
+                    ghost_animator4.SetBool("walkingReady", true);
+                    deadGhostTimer4 = 5;
+                }
+            }
+
+            //Pausing of Particle Trail
+            if (lastInput.Equals(""))
+            {
+                em.enabled = false;
+            }
+            else if (animator.speed > 0)
+            {
+                em.enabled = true;
+            }
+            else
+            {
+                em.enabled = false;
+            }
+
+            //Storing Inputs into "lastInput" variable
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                lastInput = "w";
+            }
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                lastInput = "a";
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                lastInput = "s";
+            }
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                lastInput = "d";
+            }
+
+            //Lerping Code
+            if (!tweener.TweenExists(transform)) //If PacStudent is not moving
+            {
+                if (lastInput.Equals("w")) //If last input is "w"
+                {
+                    if (levelMap[gridRow - 1, gridColumn] == 5 || levelMap[gridRow - 1, gridColumn] == 6 || levelMap[gridRow - 1, gridColumn] == 0) //If the top of the pacStudent is a normal pellet, bonus pellet or empty space
                     {
                         source.PlayOneShot(movementClip);
-                        if (levelMap[gridRow, gridColumn + 1] == 5 || levelMap[gridRow, gridColumn + 1] == 6)
+                        if (levelMap[gridRow - 1, gridColumn] == 5 || levelMap[gridRow - 1, gridColumn] == 6)
                         {
                             source.PlayOneShot(pelletEatenClip);
                         }
                         animator.speed = 1;
                         animator.SetBool("LeftReady", false);
-                        animator.SetBool("RightReady", true);
-                        animator.SetBool("UpReady", false);
+                        animator.SetBool("RightReady", false);
+                        animator.SetBool("UpReady", true);
                         animator.SetBool("DownReady", false);
                         animator.SetBool("LeftDead", false);
                         animator.SetBool("RightDead", false);
@@ -716,16 +297,16 @@ public class PacStudentController : MonoBehaviour
                         animator.SetBool("UpDead", false);
                         currentInput = lastInput;
                         Vector3 targetPos = transform.position;
-                        targetPos.x = targetPos.x + 1;
-                        pacX += 1;
-                        gridColumn += 1;
+                        targetPos.y = targetPos.y + 1;
+                        pacY += 1;
+                        gridRow -= 1;
                         tweener.AddTween(transform, transform.position, targetPos, 0.5f);
                         Debug.Log("Grid Row: " + gridRow);
                         Debug.Log("Grid Column: " + gridColumn);
                         Debug.Log("pacX: " + pacX);
                         Debug.Log("pacY: " + pacY);
                     }
-                    else //If the right of pacStudent is not walkable
+                    else //If the top of pacStudent is not walkable
                     {
                         if (currentInput.Equals("w")) //If current input is "w"
                         {
@@ -841,20 +422,479 @@ public class PacStudentController : MonoBehaviour
                         }
                     }
                 }
-                else //If right is out of bounds
+
+                if (lastInput.Equals("a")) //If last input is "a"
                 {
-                    animator.speed = 0;
-                    source.PlayOneShot(movementClip);
-                    Vector3 newPos = new Vector3(-transform.position.x, transform.position.y, transform.position.z);
-                    Vector3 targetPos = newPos;
-                    targetPos.x = targetPos.x + 1;
-                    pacX = -12.5f;
-                    gridColumn = 1;
-                    tweener.AddTween(transform, newPos, targetPos, 0.5f);
-                    Debug.Log("Grid Row: " + gridRow);
-                    Debug.Log("Grid Column: " + gridColumn);
-                    Debug.Log("pacX: " + pacX);
-                    Debug.Log("pacY: " + pacY);
+                    if (gridColumn - 1 >= 0) //If left is not out of bounds
+                    {
+                        if (levelMap[gridRow, gridColumn - 1] == 5 || levelMap[gridRow, gridColumn - 1] == 6 || levelMap[gridRow, gridColumn - 1] == 0) //If the left of pacStudent is a normal pellet, bonus pellet or empty space
+                        {
+                            source.PlayOneShot(movementClip);
+                            if (levelMap[gridRow, gridColumn - 1] == 5 || levelMap[gridRow, gridColumn - 1] == 6)
+                            {
+                                source.PlayOneShot(pelletEatenClip);
+                            }
+                            animator.speed = 1;
+                            animator.SetBool("LeftReady", true);
+                            animator.SetBool("RightReady", false);
+                            animator.SetBool("UpReady", false);
+                            animator.SetBool("DownReady", false);
+                            animator.SetBool("LeftDead", false);
+                            animator.SetBool("RightDead", false);
+                            animator.SetBool("DownDead", false);
+                            animator.SetBool("UpDead", false);
+                            currentInput = lastInput;
+                            Vector3 targetPos = transform.position;
+                            targetPos.x = targetPos.x - 1;
+                            pacX -= 1;
+                            gridColumn -= 1;
+                            tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                            Debug.Log("Grid Row: " + gridRow);
+                            Debug.Log("Grid Column: " + gridColumn);
+                            Debug.Log("pacX: " + pacX);
+                            Debug.Log("pacY: " + pacY);
+                        }
+                        else //If the left of pacStudent is not walkable
+                        {
+                            if (currentInput.Equals("w")) //If current input is "w"
+                            {
+                                if (levelMap[gridRow - 1, gridColumn] == 5 || levelMap[gridRow - 1, gridColumn] == 6 || levelMap[gridRow - 1, gridColumn] == 0) //If the top of pacStudent is a normal pellet, bonus pellet or empty space
+                                {
+                                    source.PlayOneShot(movementClip);
+                                    if (levelMap[gridRow - 1, gridColumn] == 5 || levelMap[gridRow - 1, gridColumn] == 6)
+                                    {
+                                        source.PlayOneShot(pelletEatenClip);
+                                    }
+                                    Vector3 targetPos = transform.position;
+                                    targetPos.y = targetPos.y + 1;
+                                    pacY += 1;
+                                    gridRow -= 1;
+                                    tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                                    Debug.Log("Grid Row: " + gridRow);
+                                    Debug.Log("Grid Column: " + gridColumn);
+                                    Debug.Log("pacX: " + pacX);
+                                    Debug.Log("pacY: " + pacY);
+                                }
+                                else //If the top is not walkable
+                                {
+                                    animator.speed = 0;
+                                    Debug.Log("Grid Row: " + gridRow);
+                                    Debug.Log("Grid Column: " + gridColumn);
+                                    Debug.Log("pacX: " + pacX);
+                                    Debug.Log("pacY: " + pacY);
+                                }
+                            }
+                            if (currentInput.Equals("a")) //If current input is "a"
+                            {
+                                if (levelMap[gridRow, gridColumn - 1] == 5 || levelMap[gridRow, gridColumn - 1] == 6 || levelMap[gridRow, gridColumn - 1] == 0) //If the left of pacStudent is a normal pellet, bonus pellet or empty space
+                                {
+                                    source.PlayOneShot(movementClip);
+                                    if (levelMap[gridRow, gridColumn - 1] == 5 || levelMap[gridRow, gridColumn - 1] == 6)
+                                    {
+                                        source.PlayOneShot(pelletEatenClip);
+                                    }
+                                    Vector3 targetPos = transform.position;
+                                    targetPos.x = targetPos.x - 1;
+                                    pacX -= 1;
+                                    gridColumn -= 1;
+                                    tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                                    Debug.Log("Grid Row: " + gridRow);
+                                    Debug.Log("Grid Column: " + gridColumn);
+                                    Debug.Log("pacX: " + pacX);
+                                    Debug.Log("pacY: " + pacY);
+                                }
+                                else //If the left is not walkable
+                                {
+                                    animator.speed = 0;
+                                    Debug.Log("Grid Row: " + gridRow);
+                                    Debug.Log("Grid Column: " + gridColumn);
+                                    Debug.Log("pacX: " + pacX);
+                                    Debug.Log("pacY: " + pacY);
+                                }
+                            }
+                            if (currentInput.Equals("s")) //If current input is "s"
+                            {
+                                if (levelMap[gridRow + 1, gridColumn] == 5 || levelMap[gridRow + 1, gridColumn] == 6 || levelMap[gridRow + 1, gridColumn] == 0) //If the bottom of pacStudent is a normal pellet, bonus pellet or empty space
+                                {
+                                    source.PlayOneShot(movementClip);
+                                    if (levelMap[gridRow + 1, gridColumn] == 5 || levelMap[gridRow + 1, gridColumn] == 6)
+                                    {
+                                        source.PlayOneShot(pelletEatenClip);
+                                    }
+                                    Vector3 targetPos = transform.position;
+                                    targetPos.y = targetPos.y - 1;
+                                    pacY -= 1;
+                                    gridRow += 1;
+                                    tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                                    Debug.Log("Grid Row: " + gridRow);
+                                    Debug.Log("Grid Column: " + gridColumn);
+                                    Debug.Log("pacX: " + pacX);
+                                    Debug.Log("pacY: " + pacY);
+                                }
+                                else //If the bottom is not walkable
+                                {
+                                    animator.speed = 0;
+                                    Debug.Log("Grid Row: " + gridRow);
+                                    Debug.Log("Grid Column: " + gridColumn);
+                                    Debug.Log("pacX: " + pacX);
+                                    Debug.Log("pacY: " + pacY);
+                                }
+                            }
+                            if (currentInput.Equals("d")) //If current input is "d"
+                            {
+                                if (levelMap[gridRow, gridColumn + 1] == 5 || levelMap[gridRow, gridColumn + 1] == 6 || levelMap[gridRow, gridColumn + 1] == 0) //If the right of the pacStudent is a normal pellet, bonus pellet or empty space
+                                {
+                                    source.PlayOneShot(movementClip);
+                                    if (levelMap[gridRow, gridColumn + 1] == 5 || levelMap[gridRow, gridColumn + 1] == 6)
+                                    {
+                                        source.PlayOneShot(pelletEatenClip);
+                                    }
+                                    Vector3 targetPos = transform.position;
+                                    targetPos.x = targetPos.x + 1;
+                                    pacX += 1;
+                                    gridColumn += 1;
+                                    tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                                    Debug.Log("Grid Row: " + gridRow);
+                                    Debug.Log("Grid Column: " + gridColumn);
+                                    Debug.Log("pacX: " + pacX);
+                                    Debug.Log("pacY: " + pacY);
+                                }
+                                else //If the right is not walkable
+                                {
+                                    animator.speed = 0;
+                                    Debug.Log("Grid Row: " + gridRow);
+                                    Debug.Log("Grid Column: " + gridColumn);
+                                    Debug.Log("pacX: " + pacX);
+                                    Debug.Log("pacY: " + pacY);
+                                }
+                            }
+                        }
+                    }
+                    else //If left is out of bounds
+                    {
+                        animator.speed = 0;
+                        source.PlayOneShot(movementClip);
+                        Vector3 newPos = new Vector3(-transform.position.x, transform.position.y, transform.position.z);
+                        Vector3 targetPos = newPos;
+                        targetPos.x = targetPos.x - 1;
+                        pacX = 12.5f;
+                        gridColumn = 26;
+                        tweener.AddTween(transform, newPos, targetPos, 0.5f);
+                        Debug.Log("Grid Row: " + gridRow);
+                        Debug.Log("Grid Column: " + gridColumn);
+                        Debug.Log("pacX: " + pacX);
+                        Debug.Log("pacY: " + pacY);
+                    }
+                }
+
+                if (lastInput.Equals("s")) //If last input is "s"
+                {
+                    if (levelMap[gridRow + 1, gridColumn] == 5 || levelMap[gridRow + 1, gridColumn] == 6 || levelMap[gridRow + 1, gridColumn] == 0) //If the bottom of pacStudent is a normal pellet, bonus pellet or empty space
+                    {
+                        source.PlayOneShot(movementClip);
+                        if (levelMap[gridRow + 1, gridColumn] == 5 || levelMap[gridRow + 1, gridColumn] == 6)
+                        {
+                            source.PlayOneShot(pelletEatenClip);
+                        }
+                        animator.speed = 1;
+                        animator.SetBool("LeftReady", false);
+                        animator.SetBool("RightReady", false);
+                        animator.SetBool("UpReady", false);
+                        animator.SetBool("DownReady", true);
+                        animator.SetBool("LeftDead", false);
+                        animator.SetBool("RightDead", false);
+                        animator.SetBool("DownDead", false);
+                        animator.SetBool("UpDead", false);
+                        currentInput = lastInput;
+                        Vector3 targetPos = transform.position;
+                        targetPos.y = targetPos.y - 1;
+                        pacY -= 1;
+                        gridRow += 1;
+                        tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                        Debug.Log("Grid Row: " + gridRow);
+                        Debug.Log("Grid Column: " + gridColumn);
+                        Debug.Log("pacX: " + pacX);
+                        Debug.Log("pacY: " + pacY);
+                    }
+                    else //If the bottom of pacStudent is not walkable
+                    {
+                        if (currentInput.Equals("w")) //If current input is "w"
+                        {
+                            if (levelMap[gridRow - 1, gridColumn] == 5 || levelMap[gridRow - 1, gridColumn] == 6 || levelMap[gridRow - 1, gridColumn] == 0) //If the top of pacStudent is a normal pellet, bonus pellet or empty space
+                            {
+                                source.PlayOneShot(movementClip);
+                                if (levelMap[gridRow - 1, gridColumn] == 5 || levelMap[gridRow - 1, gridColumn] == 6)
+                                {
+                                    source.PlayOneShot(pelletEatenClip);
+                                }
+                                Vector3 targetPos = transform.position;
+                                targetPos.y = targetPos.y + 1;
+                                pacY += 1;
+                                gridRow -= 1;
+                                tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
+                            }
+                            else //If the top is not walkable
+                            {
+                                animator.speed = 0;
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
+                            }
+                        }
+                        if (currentInput.Equals("a")) //If current input is "a"
+                        {
+                            if (levelMap[gridRow, gridColumn - 1] == 5 || levelMap[gridRow, gridColumn - 1] == 6 || levelMap[gridRow, gridColumn - 1] == 0) //If the left of pacStudent is a normal pellet, bonus pellet or empty space
+                            {
+                                source.PlayOneShot(movementClip);
+                                if (levelMap[gridRow, gridColumn - 1] == 5 || levelMap[gridRow, gridColumn - 1] == 6)
+                                {
+                                    source.PlayOneShot(pelletEatenClip);
+                                }
+                                Vector3 targetPos = transform.position;
+                                targetPos.x = targetPos.x - 1;
+                                pacX -= 1;
+                                gridColumn -= 1;
+                                tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
+                            }
+                            else //If the left is not walkable
+                            {
+                                animator.speed = 0;
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
+                            }
+                        }
+                        if (currentInput.Equals("s")) //If current input is "s"
+                        {
+                            if (levelMap[gridRow + 1, gridColumn] == 5 || levelMap[gridRow + 1, gridColumn] == 6 || levelMap[gridRow + 1, gridColumn] == 0) //If the bottom of pacStudent is a normal pellet, bonus pellet or empty space
+                            {
+                                source.PlayOneShot(movementClip);
+                                if (levelMap[gridRow + 1, gridColumn] == 5 || levelMap[gridRow + 1, gridColumn] == 6)
+                                {
+                                    source.PlayOneShot(pelletEatenClip);
+                                }
+                                Vector3 targetPos = transform.position;
+                                targetPos.y = targetPos.y - 1;
+                                pacY -= 1;
+                                gridRow += 1;
+                                tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
+                            }
+                            else //If the bottom is not walkable
+                            {
+                                animator.speed = 0;
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
+                            }
+                        }
+                        if (currentInput.Equals("d")) //If current input is "d"
+                        {
+                            if (levelMap[gridRow, gridColumn + 1] == 5 || levelMap[gridRow, gridColumn + 1] == 6 || levelMap[gridRow, gridColumn + 1] == 0) //If the right of the pacStudent is a normal pellet, bonus pellet or empty space
+                            {
+                                source.PlayOneShot(movementClip);
+                                if (levelMap[gridRow, gridColumn + 1] == 5 || levelMap[gridRow, gridColumn + 1] == 6)
+                                {
+                                    source.PlayOneShot(pelletEatenClip);
+                                }
+                                Vector3 targetPos = transform.position;
+                                targetPos.x = targetPos.x + 1;
+                                pacX += 1;
+                                gridColumn += 1;
+                                tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
+                            }
+                            else //If the right is not walkable
+                            {
+                                animator.speed = 0;
+                                Debug.Log("Grid Row: " + gridRow);
+                                Debug.Log("Grid Column: " + gridColumn);
+                                Debug.Log("pacX: " + pacX);
+                                Debug.Log("pacY: " + pacY);
+                            }
+                        }
+                    }
+                }
+
+                if (lastInput.Equals("d")) //If last input is "d"
+                {
+                    if (gridColumn + 1 <= (levelMap.GetLength(1) - 1)) //If the right is not out of bounds
+                    {
+                        if (levelMap[gridRow, gridColumn + 1] == 5 || levelMap[gridRow, gridColumn + 1] == 6 || levelMap[gridRow, gridColumn + 1] == 0) //If the right of the pacStudent is a normal pellet, bonus pellet or empty space
+                        {
+                            source.PlayOneShot(movementClip);
+                            if (levelMap[gridRow, gridColumn + 1] == 5 || levelMap[gridRow, gridColumn + 1] == 6)
+                            {
+                                source.PlayOneShot(pelletEatenClip);
+                            }
+                            animator.speed = 1;
+                            animator.SetBool("LeftReady", false);
+                            animator.SetBool("RightReady", true);
+                            animator.SetBool("UpReady", false);
+                            animator.SetBool("DownReady", false);
+                            animator.SetBool("LeftDead", false);
+                            animator.SetBool("RightDead", false);
+                            animator.SetBool("DownDead", false);
+                            animator.SetBool("UpDead", false);
+                            currentInput = lastInput;
+                            Vector3 targetPos = transform.position;
+                            targetPos.x = targetPos.x + 1;
+                            pacX += 1;
+                            gridColumn += 1;
+                            tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                            Debug.Log("Grid Row: " + gridRow);
+                            Debug.Log("Grid Column: " + gridColumn);
+                            Debug.Log("pacX: " + pacX);
+                            Debug.Log("pacY: " + pacY);
+                        }
+                        else //If the right of pacStudent is not walkable
+                        {
+                            if (currentInput.Equals("w")) //If current input is "w"
+                            {
+                                if (levelMap[gridRow - 1, gridColumn] == 5 || levelMap[gridRow - 1, gridColumn] == 6 || levelMap[gridRow - 1, gridColumn] == 0) //If the top of pacStudent is a normal pellet, bonus pellet or empty space
+                                {
+                                    source.PlayOneShot(movementClip);
+                                    if (levelMap[gridRow - 1, gridColumn] == 5 || levelMap[gridRow - 1, gridColumn] == 6)
+                                    {
+                                        source.PlayOneShot(pelletEatenClip);
+                                    }
+                                    Vector3 targetPos = transform.position;
+                                    targetPos.y = targetPos.y + 1;
+                                    pacY += 1;
+                                    gridRow -= 1;
+                                    tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                                    Debug.Log("Grid Row: " + gridRow);
+                                    Debug.Log("Grid Column: " + gridColumn);
+                                    Debug.Log("pacX: " + pacX);
+                                    Debug.Log("pacY: " + pacY);
+                                }
+                                else //If the top is not walkable
+                                {
+                                    animator.speed = 0;
+                                    Debug.Log("Grid Row: " + gridRow);
+                                    Debug.Log("Grid Column: " + gridColumn);
+                                    Debug.Log("pacX: " + pacX);
+                                    Debug.Log("pacY: " + pacY);
+                                }
+                            }
+                            if (currentInput.Equals("a")) //If current input is "a"
+                            {
+                                if (levelMap[gridRow, gridColumn - 1] == 5 || levelMap[gridRow, gridColumn - 1] == 6 || levelMap[gridRow, gridColumn - 1] == 0) //If the left of pacStudent is a normal pellet, bonus pellet or empty space
+                                {
+                                    source.PlayOneShot(movementClip);
+                                    if (levelMap[gridRow, gridColumn - 1] == 5 || levelMap[gridRow, gridColumn - 1] == 6)
+                                    {
+                                        source.PlayOneShot(pelletEatenClip);
+                                    }
+                                    Vector3 targetPos = transform.position;
+                                    targetPos.x = targetPos.x - 1;
+                                    pacX -= 1;
+                                    gridColumn -= 1;
+                                    tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                                    Debug.Log("Grid Row: " + gridRow);
+                                    Debug.Log("Grid Column: " + gridColumn);
+                                    Debug.Log("pacX: " + pacX);
+                                    Debug.Log("pacY: " + pacY);
+                                }
+                                else //If the left is not walkable
+                                {
+                                    animator.speed = 0;
+                                    Debug.Log("Grid Row: " + gridRow);
+                                    Debug.Log("Grid Column: " + gridColumn);
+                                    Debug.Log("pacX: " + pacX);
+                                    Debug.Log("pacY: " + pacY);
+                                }
+                            }
+                            if (currentInput.Equals("s")) //If current input is "s"
+                            {
+                                if (levelMap[gridRow + 1, gridColumn] == 5 || levelMap[gridRow + 1, gridColumn] == 6 || levelMap[gridRow + 1, gridColumn] == 0) //If the bottom of pacStudent is a normal pellet, bonus pellet or empty space
+                                {
+                                    source.PlayOneShot(movementClip);
+                                    if (levelMap[gridRow + 1, gridColumn] == 5 || levelMap[gridRow + 1, gridColumn] == 6)
+                                    {
+                                        source.PlayOneShot(pelletEatenClip);
+                                    }
+                                    Vector3 targetPos = transform.position;
+                                    targetPos.y = targetPos.y - 1;
+                                    pacY -= 1;
+                                    gridRow += 1;
+                                    tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                                    Debug.Log("Grid Row: " + gridRow);
+                                    Debug.Log("Grid Column: " + gridColumn);
+                                    Debug.Log("pacX: " + pacX);
+                                    Debug.Log("pacY: " + pacY);
+                                }
+                                else //If the bottom is not walkable
+                                {
+                                    animator.speed = 0;
+                                    Debug.Log("Grid Row: " + gridRow);
+                                    Debug.Log("Grid Column: " + gridColumn);
+                                    Debug.Log("pacX: " + pacX);
+                                    Debug.Log("pacY: " + pacY);
+                                }
+                            }
+                            if (currentInput.Equals("d")) //If current input is "d"
+                            {
+                                if (levelMap[gridRow, gridColumn + 1] == 5 || levelMap[gridRow, gridColumn + 1] == 6 || levelMap[gridRow, gridColumn + 1] == 0) //If the right of the pacStudent is a normal pellet, bonus pellet or empty space
+                                {
+                                    source.PlayOneShot(movementClip);
+                                    if (levelMap[gridRow, gridColumn + 1] == 5 || levelMap[gridRow, gridColumn + 1] == 6)
+                                    {
+                                        source.PlayOneShot(pelletEatenClip);
+                                    }
+                                    Vector3 targetPos = transform.position;
+                                    targetPos.x = targetPos.x + 1;
+                                    pacX += 1;
+                                    gridColumn += 1;
+                                    tweener.AddTween(transform, transform.position, targetPos, 0.5f);
+                                    Debug.Log("Grid Row: " + gridRow);
+                                    Debug.Log("Grid Column: " + gridColumn);
+                                    Debug.Log("pacX: " + pacX);
+                                    Debug.Log("pacY: " + pacY);
+                                }
+                                else //If the right is not walkable
+                                {
+                                    animator.speed = 0;
+                                    Debug.Log("Grid Row: " + gridRow);
+                                    Debug.Log("Grid Column: " + gridColumn);
+                                    Debug.Log("pacX: " + pacX);
+                                    Debug.Log("pacY: " + pacY);
+                                }
+                            }
+                        }
+                    }
+                    else //If right is out of bounds
+                    {
+                        animator.speed = 0;
+                        source.PlayOneShot(movementClip);
+                        Vector3 newPos = new Vector3(-transform.position.x, transform.position.y, transform.position.z);
+                        Vector3 targetPos = newPos;
+                        targetPos.x = targetPos.x + 1;
+                        pacX = -12.5f;
+                        gridColumn = 1;
+                        tweener.AddTween(transform, newPos, targetPos, 0.5f);
+                        Debug.Log("Grid Row: " + gridRow);
+                        Debug.Log("Grid Column: " + gridColumn);
+                        Debug.Log("pacX: " + pacX);
+                        Debug.Log("pacY: " + pacY);
+                    }
                 }
             }
         }
@@ -864,7 +904,7 @@ public class PacStudentController : MonoBehaviour
     {
         if (other != null)
         {
-            if (other.gameObject.name.Contains("OutsideWall") || other.gameObject.name.Contains("InnerWall"))
+            if (other.gameObject.name.Contains("OutsideWall") || other.gameObject.name.Contains("InnerWall") || other.gameObject.name.Contains("InnerCorner"))
             {
                 if (lastInput == currentInput)
                 {

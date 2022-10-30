@@ -48,7 +48,7 @@ public class AudioController : MonoBehaviour
     {
         source.clip = introClip;
         source.Play();
-        yield return new WaitForSeconds(introClip.length);
+        yield return new WaitForSeconds(4f);
         StartCoroutine(playNormalClip());
     }
 
