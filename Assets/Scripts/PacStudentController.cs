@@ -80,12 +80,26 @@ public class PacStudentController : MonoBehaviour
     private string millisecond = "";
     public static bool gameTimerActive = true;
     private bool allowInput = true;
+    private int pelletCount;
+    private int actualPelletCount = 2;
 
     // Start is called before the first frame update
     void Start()
     {
         source = GetComponent<AudioSource>();
         em = particleSystem.emission;
+
+        //Check number of normal pellets and power pellets
+        for (int i = 0; i < levelMap.GetLength(0); i++)
+        {
+            for (int j = 0; j < levelMap.GetLength(1); j++)
+            {
+                if (levelMap[i, j] == 5 || levelMap[i, j] == 6)
+                {
+                    actualPelletCount++;
+                }
+            }
+        }
     }
 
     // Update is called once per frame
@@ -127,6 +141,12 @@ public class PacStudentController : MonoBehaviour
             ghost_animator2.enabled = true;
             ghost_animator3.enabled = true;
             ghost_animator4.enabled = true;
+
+            //Check if all pellet is eaten
+            if (pelletCount == actualPelletCount)
+            {
+                gameOver.enabled = true;
+            }
 
             //Game Over Code
             if (gameOver.enabled == true)
@@ -881,6 +901,7 @@ public class PacStudentController : MonoBehaviour
             }
             else if (other.gameObject.name.Contains("NormalPellet"))
             {
+                pelletCount++;
                 Destroy(other.gameObject);
                 string[] scoreTexts = score.text.Split(':');
                 int scorePoint = int.Parse(scoreTexts[1]) + 10;
@@ -895,6 +916,7 @@ public class PacStudentController : MonoBehaviour
             }
             else if (other.gameObject.name.Contains("PowerPellet"))
             {
+                pelletCount++;
                 Destroy(other.gameObject);
                 ghost_animator1.SetBool("scaredReady", true);
                 ghost_animator1.SetBool("recoveringReady", false);
