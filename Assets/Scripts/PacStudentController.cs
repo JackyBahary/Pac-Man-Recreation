@@ -906,6 +906,8 @@ public class PacStudentController : MonoBehaviour
             }
             else if (other.gameObject.name.Contains("Ghost") && (ghost_animator1.GetBool("scaredReady") == false) && (ghost_animator1.GetBool("recoveringReady") == false))
             {
+                lastInput = "";
+                currentInput = "";
                 source.PlayOneShot(pacDeadClip, 3.0f);
                 pacStudentDead.Play();
                 if (animator.GetBool("LeftReady") == true)
@@ -956,8 +958,6 @@ public class PacStudentController : MonoBehaviour
                     animator.SetBool("UpReady", false);
                     animator.SetBool("DownReady", false);
                 }
-                lastInput = "";
-                currentInput = "";
                 bool lost = true;
                 while (lost)
                 {
