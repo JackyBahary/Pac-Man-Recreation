@@ -11495,6 +11495,7 @@ MonoBehaviour:
   tweener: {fileID: 1255826495}
   score: {fileID: 1424925153}
   ghostTimer: {fileID: 84129005}
+  gameCountTimer: {fileID: 1146745438}
   particleSystem: {fileID: 1160525615}
   wallCollidedParticles: {fileID: 1313011751}
   pacStudentDead: {fileID: 1312463011}
@@ -11516,6 +11517,7 @@ MonoBehaviour:
   - {fileID: 1689198108}
   - {fileID: 634968082}
   - {fileID: 285759151}
+  gameTimerActive: 1
 --- !u!54 &1255826498
 Rigidbody:
   m_ObjectHideFlags: 0

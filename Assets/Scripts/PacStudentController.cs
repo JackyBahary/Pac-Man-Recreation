@@ -9,6 +9,7 @@ public class PacStudentController : MonoBehaviour
     public Tweener tweener;
     public TextMeshProUGUI score;
     public TextMeshProUGUI ghostTimer;
+    public TextMeshProUGUI gameCountTimer;
     public new ParticleSystem particleSystem;
     public ParticleSystem wallCollidedParticles;
     public ParticleSystem pacStudentDead;
@@ -68,8 +69,13 @@ public class PacStudentController : MonoBehaviour
     private float deadGhostTimer3 = 5;
     private float deadGhostTimer4 = 5;
     private float loadingTimer = 4;
+    private float gameTimer = 0;
     public Image[] lives = new Image[3];
     public TextMeshProUGUI[] countdown = new TextMeshProUGUI[4];
+    private string minute = "";
+    private string second = "";
+    private string millisecond = "";
+    public bool gameTimerActive = true;
 
     // Start is called before the first frame update
     void Start()
@@ -118,6 +124,34 @@ public class PacStudentController : MonoBehaviour
             ghost_animator2.enabled = true;
             ghost_animator3.enabled = true;
             ghost_animator4.enabled = true;
+
+            //Game Timer Code
+            if (gameTimerActive) {
+                gameTimer += Time.deltaTime;
+                string timer = gameTimer.ToString();
+                string[] times = timer.Split('.');
+                if (int.Parse(times[0]) < 60)
+                {
+                    string finalGameTimer = "00:" + int.Parse(times[0]).ToString("00") + ":" + (int.Parse(times[1]) % 100).ToString("00");
+                    minute = "00";
+                    second = int.Parse(times[0]).ToString("00");
+                    millisecond = (int.Parse(times[1]) % 100).ToString("00");
+                    gameCountTimer.text = "Timer: " + finalGameTimer;
+                }
+                if (int.Parse(times[0]) >= 60)
+                {
+                    string[] minutes = (float.Parse(times[0]) / 60.0).ToString("0.000000").Split('.');
+                    string finalGameTimer = int.Parse(minutes[0]).ToString("00") + ":" + (float.Parse("0." + minutes[1]) * 60).ToString("00") + ":" + (int.Parse(times[1]) % 100).ToString("00");
+                    minute = int.Parse(minutes[0]).ToString("00");
+                    second = (float.Parse("0." + minutes[1]) * 60).ToString("00");
+                    millisecond = (int.Parse(times[1]) % 100).ToString("00");
+                    gameCountTimer.text = "Timer: " + finalGameTimer;
+                }
+                Debug.Log("Minute:" + minute);
+                Debug.Log("Second: " + second);
+                Debug.Log("Millisecond: " + millisecond);
+            }
+            
 
             //Ghost Scared Timer
             if (ghostTimer.isActiveAndEnabled)
