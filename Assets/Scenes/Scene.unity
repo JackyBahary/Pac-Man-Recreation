@@ -11646,6 +11646,7 @@ MonoBehaviour:
   ghost_animator2: {fileID: 2071941906}
   ghost_animator3: {fileID: 1726964260}
   ghost_animator4: {fileID: 1294080162}
+  loadingTimer: 4
   lives:
   - {fileID: 2147403867}
   - {fileID: 1950228370}
@@ -11655,7 +11656,6 @@ MonoBehaviour:
   - {fileID: 1689198108}
   - {fileID: 634968082}
   - {fileID: 285759151}
-  gameTimerActive: 1
 --- !u!54 &1255826498
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -12019,7 +12019,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 1
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -25905,6 +25905,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d520614d6293184cadfa937c3e76507, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  score: {fileID: 0}
+  time: {fileID: 0}
 --- !u!1 &1726964257
 GameObject:
   m_ObjectHideFlags: 0

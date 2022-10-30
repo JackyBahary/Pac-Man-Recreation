@@ -296,7 +296,6 @@ public class PacStudentController : MonoBehaviour
                 deadPacTimer -= Time.deltaTime;
                 if (deadPacTimer < 0)
                 {
-                    this.GetComponent<BoxCollider>().enabled = true;
                     animator.SetBool("LeftDead", false);
                     animator.SetBool("RightDead", false);
                     animator.SetBool("DownDead", false);
@@ -311,6 +310,7 @@ public class PacStudentController : MonoBehaviour
                     gridRow = 1;
                     gridColumn = 1;
                     tweener.AddTween(transform, newPos, newPos, 0f);
+                    this.GetComponent<BoxCollider>().enabled = true;
                     deadPacTimer = 1;
                 }
             }
@@ -1075,13 +1075,13 @@ public class PacStudentController : MonoBehaviour
             }
             else if (other.gameObject.name.Contains("Ghost") && (ghost_animator1.GetBool("scaredReady") == false) && (ghost_animator1.GetBool("recoveringReady") == false))
             {
+                this.GetComponent<BoxCollider>().enabled = false;
                 lastInput = "";
                 currentInput = "";
                 source.PlayOneShot(pacDeadClip, 3.0f);
                 pacStudentDead.Play();
                 if (animator.GetBool("LeftReady") == true)
                 {
-                    this.GetComponent<BoxCollider>().enabled = false;
                     animator.SetBool("LeftDead", true);
                     animator.SetBool("RightDead", false);
                     animator.SetBool("DownDead", false);
@@ -1093,7 +1093,6 @@ public class PacStudentController : MonoBehaviour
                 }
                 else if (animator.GetBool("RightReady") == true)
                 {
-                    this.GetComponent<BoxCollider>().enabled = false;
                     animator.SetBool("LeftDead", false);
                     animator.SetBool("RightDead", true);
                     animator.SetBool("DownDead", false);
@@ -1105,7 +1104,6 @@ public class PacStudentController : MonoBehaviour
                 }
                 else if (animator.GetBool("DownReady") == true)
                 {
-                    this.GetComponent<BoxCollider>().enabled = false;
                     animator.SetBool("LeftDead", false);
                     animator.SetBool("RightDead", false);
                     animator.SetBool("DownDead", true);
@@ -1117,7 +1115,6 @@ public class PacStudentController : MonoBehaviour
                 }
                 else if (animator.GetBool("UpReady") == true)
                 {
-                    this.GetComponent<BoxCollider>().enabled = false;
                     animator.SetBool("LeftDead", false);
                     animator.SetBool("RightDead", false);
                     animator.SetBool("DownDead", false);
